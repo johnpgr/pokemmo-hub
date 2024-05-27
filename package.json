@@ -11,6 +11,9 @@
     "pokemmo guide",
     "react"
   ],
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "develop": "gatsby develop",
     "start": "gatsby develop",
