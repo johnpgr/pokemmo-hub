@@ -1,41 +1,44 @@
 // gatsby-node.js
 
-const fetch = require('node-fetch');
-const { getItemInfo, getPokemmoID } = require('./src/utils/items');
+const fetch = require('node-fetch')
+const path = require('path')
+const { getItemInfo, getPokemmoID } = require('./src/utils/items')
 
+const NODE_TYPE = 'Pokemmo'
 
-const NODE_TYPE = "Pokemmo"
+const slugify = (string) =>
+    string
+        .toString()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w-]+/g, '')
+        .replace(/--+/g, '-')
 
-const slugify = string => string.toString()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, '-')
-    .replace(/[^\w-]+/g, '')
-    .replace(/--+/g, '-')
+exports.sourceNodes = async ({
+    actions,
+    createContentDigest,
+    createNodeId,
+}) => {
+    const { createNode } = actions
 
-exports.sourceNodes = async ({ actions, createContentDigest, createNodeId }) => {
-    const { createNode } = actions;
-
-    const response = await fetch(
-        `https://pokemmoprices.com/api/v2/items/all`
-    );
-    const { data } = await response.json();
+    const response = await fetch(`https://pokemmoprices.com/api/v2/items/all`)
+    const { data } = await response.json()
 
     data.forEach((item) => {
         const item_pokemmo_id = getPokemmoID(item.i)
         if (!item_pokemmo_id) {
-            return;
+            return
         }
         const slug = slugify(item.n.en)
-
 
         item = {
             ...item,
             ...getItemInfo(item_pokemmo_id),
             slug: slug,
-            _id: item_pokemmo_id
+            _id: item_pokemmo_id,
         }
 
         createNode({
@@ -45,13 +48,26 @@ exports.sourceNodes = async ({ actions, createContentDigest, createNodeId }) => 
             children: [],
             context: {
                 i: item.i,
-                slug: slug
+                slug: slug,
             },
             internal: {
                 type: NODE_TYPE,
                 content: JSON.stringify(item),
-                contentDigest: createContentDigest(item)
-            }
-        });
-    });
-};
+                contentDigest: createContentDigest(item),
+            },
+        })
+    })
+}
+
+exports.onCreateWebpackConfig = ({ actions }) => {
+    actions.setWebpackConfig({
+        resolve: {
+            alias: {
+                '@/components': path.resolve(__dirname, 'src/components'),
+                '@/utils': path.resolve(__dirname, 'src/utils'),
+                '@/data': path.resolve(__dirname, 'src/data'),
+            },
+        },
+    })
+}
+

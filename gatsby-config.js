@@ -1,4 +1,4 @@
-require("dotenv").config({
+require('dotenv').config({
     path: `.env.${process.env.NODE_ENV}`,
 })
 const {
@@ -14,20 +14,21 @@ module.exports = {
     siteMetadata: {
         title: `PokeMMO Hub`,
         siteUrl,
-        description: `A website for everything about PokeMMO`
+        description: `A website for everything about PokeMMO`,
     },
     plugins: [
-        "gatsby-plugin-image",
-        "gatsby-plugin-sitemap",
-        "gatsby-plugin-sharp",
-        "gatsby-transformer-sharp",
+        'gatsby-plugin-image',
+        'gatsby-plugin-sitemap',
+        'gatsby-plugin-sharp',
+        'gatsby-transformer-sharp',
+        'gatsby-plugin-postcss',
         {
             resolve: 'gatsby-source-filesystem',
             options: {
-                "name": "assets",
-                "path": "./src/assets/"
+                name: 'assets',
+                path: './src/assets/',
             },
-            __key: "assets"
+            __key: 'assets',
         },
         {
             resolve: `gatsby-plugin-manifest`,
@@ -39,7 +40,7 @@ module.exports = {
                 theme_color: `#343a40`,
                 display: `standalone`,
                 icon: 'src/images/logo.svg',
-                theme_color_in_head: false
+                theme_color_in_head: false,
             },
         },
         {
@@ -66,14 +67,12 @@ module.exports = {
         {
             resolve: 'gatsby-plugin-google-gtag',
             options: {
-                trackingIds: [
-                    "G-KW8TM1VBRZ"
-                ],
+                trackingIds: ['G-KW8TM1VBRZ'],
                 gtagConfig: {
                     anonymize_ip: true,
                     cookie_expires: 0,
                 },
-            }
+            },
         },
         {
             resolve: `gatsby-plugin-breadcrumb`,
@@ -83,23 +82,24 @@ module.exports = {
                     `**/dev-404-page/**`,
                     `**/404/**`,
                     `**/404.html`,
-                    `**/offline-plugin-app-shell-fallback/**`
+                    `**/offline-plugin-app-shell-fallback/**`,
                 ],
                 crumbLabelUpdates: [
                     {
                         pathname: '/items',
-                        crumbLabel: 'Items'
+                        crumbLabel: 'Items',
                     },
                     {
                         pathname: '/tools',
-                        crumbLabel: 'Tools'
+                        crumbLabel: 'Tools',
                     },
                     {
                         pathname: '/market',
-                        crumbLabel: 'Market'
+                        crumbLabel: 'Market',
                     },
-                ]
+                ],
             },
-        }
-    ]
-};
+        },
+    ],
+}
+

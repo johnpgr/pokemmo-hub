@@ -3,12 +3,23 @@ import reactStringReplace from 'react-string-replace';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import translations from '../locales';
 
-const TranslationContext = createContext({
+/**
+* @typedef TranslationContext
+* @type {object}
+    * @property {string} language
+    * @property {React.Dispatch<React.SetStateAction<string>>} changeLanguage
+    * @property {string[]} languages,
+    * @property {(key: string) => null} t
+*/
+
+/** @type {TranslationContext} */
+const initial = {
     language: 'en',
     changeLanguage: () => null,
     languages: [],
     t: () => null
-})
+}
+const TranslationContext = createContext(initial)
 
 export function useTranslations() {
     return useContext(TranslationContext)
@@ -26,7 +37,7 @@ export function TranslationProvider({ children }) {
         }
 
         let translation = translations[targetLang]?.[string.toLowerCase()];
-        
+
         // Fall back to english if translation is missing
         if (!translation) {
             translation = translations['en']?.[string.toLowerCase()];
