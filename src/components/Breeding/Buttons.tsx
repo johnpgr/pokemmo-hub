@@ -45,7 +45,7 @@ export function JsonImportButton(props: { handleImportJson: (data: string) => vo
                 <pre spellCheck={false}>
                     <code>
                         <Textarea
-                            className="w-full resize-none border-none"
+                            className="w-full resize-none border-dark"
                             rows={16}
                             value={jsonData}
                             onChange={(e) => setJsonData(e.currentTarget?.value ?? "")}
@@ -105,7 +105,7 @@ export function ImportExportButton(props: { handleExport: () => string }) {
                     <code>
                         <Textarea
                             rows={16}
-                            className="w-full resize-none border-none rounded-none"
+                            className="w-full resize-none border-dark rounded-none"
                             value={jsonData}
                             onChange={(e) => setJsonData(e.currentTarget?.value ?? "")}
                         />

@@ -162,14 +162,14 @@ export function PokemonNodeSelect(props: {
                         />
                     ) : null}
                     {!isPokemonToBreed ? (
-                        <Command className="w-full max-w-lg border">
+                        <Command className="w-full max-w-lg border border-dark shadow">
                             <CommandInput
                                 placeholder="Search pokemon..."
                                 value={search}
                                 onValueChange={setSearch}
                                 data-cy="search-pokemon-input"
                             />
-                            <div className="flex items-center pl-3 gap-2 text-xs text-foreground/80 p-2 border-b">
+                            <div className="flex items-center pl-3 gap-2 text-xs text-foreground/80 p-2 border-b border-dark">
                                 <Checkbox
                                     className="border-foreground/50"
                                     checked={searchMode === SearchMode.EggGroupMatches}

@@ -31,7 +31,7 @@ export function PokemonSpeciesSelect(props: {
         <div>
             <p className="text-foreground/70 text-sm m-0 pb-2">What Pokémon species?</p>
             <Popover open={isOpen} onOpenChange={setIsOpen}>
-                <PopoverTrigger type='button' className={cn(buttonVariants({ variant: 'popover' }), `border ${props.currentSelectedNode.species ? "pl-2" : "pl-4"}`)}>
+                <PopoverTrigger type='button' className={cn(buttonVariants({ variant: 'popover' }), `border border-dark ${props.currentSelectedNode.species ? "pl-2" : "pl-4"}`)}>
                     {props.currentSelectedNode?.species ? (
                         <img
                             className="top-[1px] left-0"
@@ -47,7 +47,7 @@ export function PokemonSpeciesSelect(props: {
                         : "Select a Pokemon"}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </PopoverTrigger>
-                <PopoverContent className="p-0 border">
+                <PopoverContent className="p-0 border border-dark">
                     <Command>
                         <CommandInput
                             placeholder="Search pokemon..."

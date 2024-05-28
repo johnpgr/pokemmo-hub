@@ -40,7 +40,7 @@ export function PokemonIvSelect(props: {
         <div>
             <p className="text-foreground/70 text-sm m-0 pb-2">How many IV&apos;s do you want?</p>
             <PokemonIvRadioGroup
-                className="border rounded-md bg-popover w-fit flex"
+                className="border border-dark rounded-md bg-popover w-fit flex"
                 defaultValue={"2"}
                 onValueChange={handleDesired31IvCountChange}
             >
@@ -67,12 +67,12 @@ export function PokemonIvSelect(props: {
                             value={props.currentIVDropdownValues[i]!}
                             onValueChange={(v) => handleIvSelectChange(v as PokemonIv, i)}
                         >
-                            <SelectTrigger className="bg-popover">
+                            <SelectTrigger className="bg-popover hover:bg-popover/90 border-dark">
                                 <SelectValue aria-label={props.currentIVDropdownValues[i]}>
                                     {Strings.pascalToSpacedPascal(props.currentIVDropdownValues[i]!)}
                                 </SelectValue>
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="border-dark">
                                 {IV_DROPDOWN_LIST_VALUES.map((iv) => (
                                     <SelectItem key={`PokemonIvSelect:${i}:${iv}`} value={iv}>
                                         {Strings.pascalToSpacedPascal(iv)}

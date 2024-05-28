@@ -26,11 +26,11 @@ export function PokemonNatureSelect(props: {
         <div>
             <p className="text-sm text-foreground/70 pb-2 m-0">Consider nature in breeding project?</p>
             <Popover open={isOpen} onOpenChange={setIsOpen}>
-                <PopoverTrigger className={cn(buttonVariants({ variant: "popover" }), "border")}>
+                <PopoverTrigger className={cn(buttonVariants({ variant: "popover" }), "border border-dark")}>
                     {!natured ? "Select a nature" : props.currentPokemonInSelect.nature!}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </PopoverTrigger>
-                <PopoverContent className="p-0 border">
+                <PopoverContent className="p-0 border border-dark">
                     <Command>
                         <CommandInput
                             placeholder="Search nature..."

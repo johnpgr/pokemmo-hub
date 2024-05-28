@@ -11,7 +11,7 @@ export function PokemonNodeHeldItem(props: { item: HeldItem }) {
     return (
         <TooltipProvider delayDuration={250}>
             <Tooltip>
-                <TooltipTrigger className={cn(buttonVariants({ variant: 'outline' }), "w-fit h-fit p-0 rounded-full")}>
+                <TooltipTrigger className={cn(buttonVariants({ variant: 'outline' }), "w-fit h-fit p-0 rounded-full border-dark")}>
                     <img
                         src={getEvItemSpriteUrl(props.item)}
                         alt={`Held item: ${props.item}`}

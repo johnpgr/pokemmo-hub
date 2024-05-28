@@ -36,7 +36,7 @@ export function PokemonToBreedSelect() {
     const expectedCost = getExpectedBreedCost(desired31IVCount, Boolean(currentPokemonInSelect.nature))
     const breederKindCountTable = run(() => {
         const table = POKEMON_BREEDER_KIND_COUNT_BY_GENERATIONS[desired31IVCount]
-        assert(table, "POKEMON_BREEDER_KIND_COUNT_BY_GENERATIONS accessed with an invalid key.")
+        assert(table !== undefined, "POKEMON_BREEDER_KIND_COUNT_BY_GENERATIONS accessed with an invalid key.")
 
         if (currentPokemonInSelect.nature) {
             return table.natured
@@ -46,7 +46,7 @@ export function PokemonToBreedSelect() {
     })
     const totalBreedPokemonCount = Object.values(breederKindCountTable).reduce((acc, val) => acc + val, 0)
 
-    function validateIvFieldsUniqueness() {
+    function validateIvFieldsUniqueness(): boolean {
         const selectedValues = currentIVDropdownValues.slice(0, desired31IVCount)
         const uniques = new Set(selectedValues)
         return uniques.size === selectedValues.length

@@ -42,7 +42,7 @@ export function PokemonNodeGender(props: {
 
     return (
         <Popover>
-            <PopoverTrigger className={cn(buttonVariants({ variant: "outline" }), "rounded-full border p-[6px] h-fit w-fit")}>
+            <PopoverTrigger className={cn(buttonVariants({ variant: "outline" }), "rounded-full border border-dark p-[6px] h-fit w-fit")}>
                 {!gender || props.currentNode.isGenderless() || props.currentNode.isDitto() ? (
                     <HelpCircle size={20} />
                 ) : gender === PokemonGender.Female ? (
@@ -66,14 +66,14 @@ export function PokemonNodeGender(props: {
                                 <ToggleGroupItem
                                     value="Female"
                                     aria-label="Toggle Female"
-                                    className="data-[state=on]:bg-pink-100 hover:bg-pink-100"
+                                    className="bg-popover data-[state=on]:bg-pink-100 hover:bg-pink-100"
                                 >
                                     <Female className="h-6 w-6 fill-pink-500 antialiased" />
                                 </ToggleGroupItem>
                                 <ToggleGroupItem
                                     value="Male"
                                     aria-label="Toggle Male"
-                                    className="data-[state=on]:bg-blue-100 hover:bg-blue-100"
+                                    className="bg-popover data-[state=on]:bg-blue-100 hover:bg-blue-100"
                                 >
                                     <Male className="fill-blue-500 h-6 w-6 antialiased" />
                                 </ToggleGroupItem>
