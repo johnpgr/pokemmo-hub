@@ -11,7 +11,7 @@ enum LineDirection {
     Right,
 }
 
-export function PokemonNodeLines(props: {
+export function PokemonLeafLines(props: {
     position: PokemonBreedTreePosition
     rowLength: number
     breedTree: PokemonBreedTreeMap
@@ -20,13 +20,13 @@ export function PokemonNodeLines(props: {
 }) {
     const size = 100 / props.rowLength
 
-    const node = props.breedTree[props.position.key()]
-    assert(node, "Node should exist in PokemonNodeLines")
+    const leaf = props.breedTree[props.position.key()]
+    assert(leaf, "Leaf should exist in PokemonLeafLines")
 
-    const partnerNode = node.getPartnerNode(props.breedTree)
+    const partnerLeaf = leaf.getPartnerLeaf(props.breedTree)
 
     // Root node
-    if (!partnerNode) {
+    if (!partnerLeaf) {
         return (
             <div style={{ flexBasis: `${size}%` }} className="flex items-center justify-center relative">
                 {props.children}
@@ -34,14 +34,14 @@ export function PokemonNodeLines(props: {
         )
     }
 
-    const lineDirection = partnerNode.position.col > node.position.col ? LineDirection.Left : LineDirection.Right
-    const hasError = props.breedErrors[node.position.key()] || props.breedErrors[partnerNode.position.key()]
+    const lineDirection = partnerLeaf.position.col > leaf.position.col ? LineDirection.Left : LineDirection.Right
+    const hasError = props.breedErrors[leaf.position.key()] || props.breedErrors[partnerLeaf.position.key()]
 
     const color = run(() => {
         if (hasError) {
             return "bg-red-500"
         }
-        if (node.species && node.gender && partnerNode.species && partnerNode.gender) {
+        if (leaf.species && leaf.gender && partnerLeaf.species && partnerLeaf.gender) {
             return "bg-green-500"
         }
         return "bg-foreground"

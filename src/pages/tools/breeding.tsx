@@ -4,7 +4,7 @@ import { Page } from '../../components/Page'
 import { PageTitle } from '../../components/PageTitle'
 import { Seo } from '../../components/SEO'
 import { useTranslations } from '../../context/TranslationsContext'
-import { PokemonToBreedSelect } from "@/components/Breeding/PokemonBreedSelect"
+import { PokemonBreedSelect } from "@/components/Breeding/PokemonBreedSelect"
 import { PokemonBreedTree } from "@/components/Breeding/PokemonBreedTree"
 import { BreedTreeContext } from "@/components/Breeding/core/ctx/PokemonBreedTreeContext"
 import pokemons from "@/data/pokemmo/breeding-monster.json"
@@ -23,7 +23,7 @@ const Breeding = ({ pageContext }: any) => {
                 <Information title={t("How to use the breeding tool")}>
                     {t("breedingToolExplanationModal")}
                 </Information>
-                <PokemonToBreedSelect />
+                <PokemonBreedSelect />
                 <PokemonBreedTree />
             </BreedTreeContext>
             <Toaster />

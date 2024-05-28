@@ -10,9 +10,9 @@ import React from "react"
 import { toast } from "sonner"
 import { getExpectedBreedCost } from "./PokemonBreedSelect"
 import { PokemonIvColors } from "./PokemonIvColors"
-import { HeldItem, getHeldItemForNode } from "./PokemonNodeHeldItem"
-import { PokemonNodeLines } from "./PokemonNodeLines"
-import { PokemonNodeSelect } from "./PokemonNodeSelect"
+import { HeldItem, getHeldItemForLeaf } from "./PokemonLeafHeldItem"
+import { PokemonLeafLines } from "./PokemonLeafLines"
+import { PokemonLeafSelect } from "./PokemonLeafSelect"
 import { BREED_ITEM_COSTS, GENDER_GUARANTEE_COST_BY_PERCENTAGE_MALE } from "./consts"
 import { Alert, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
@@ -74,7 +74,7 @@ function PokemonBreedTreeFinal() {
                 }
             }
 
-            const heldItem = getHeldItemForNode(node, ctx.breedTree.map)
+            const heldItem = getHeldItemForLeaf(node, ctx.breedTree.map)
             if (!heldItem) {
                 continue
             }
@@ -131,7 +131,7 @@ function PokemonBreedTreeFinal() {
                 return
             }
 
-            const partner = node.getPartnerNode(ctx.breedTree.map)
+            const partner = node.getPartnerLeaf(ctx.breedTree.map)
             if (!partner?.species) {
                 return
             }
@@ -173,64 +173,64 @@ function PokemonBreedTreeFinal() {
         //inc by 2 because we only want to breed() on one parent
         for (let col = 0; col < rowLength; col += 2) {
             const pos = new PokemonBreedTreePosition(lastRow, col)
-            let node = ctx.breedTree.map[pos.key()]
-            let partnerNode = node?.getPartnerNode(ctx.breedTree.map)
+            let leaf = ctx.breedTree.map[pos.key()]
+            let partnerLeaf = leaf?.getPartnerLeaf(ctx.breedTree.map)
 
             function next() {
-                node = node?.getChildNode(ctx.breedTree.map)
-                partnerNode = node?.getPartnerNode(ctx.breedTree.map)
+                leaf = leaf?.getChildLeaf(ctx.breedTree.map)
+                partnerLeaf = leaf?.getPartnerLeaf(ctx.breedTree.map)
             }
 
-            while (node && partnerNode) {
+            while (leaf && partnerLeaf) {
                 // bind the current node position because next() will move the node pointer before the errors are set
-                const currentNodePos = node.position.key()
+                const currentLeafPos = leaf.position.key()
 
-                if (!node.gender || !partnerNode.gender || !node.species || !partnerNode.species) {
-                    deleteErrors(currentNodePos)
+                if (!leaf.gender || !partnerLeaf.gender || !leaf.species || !partnerLeaf.species) {
+                    deleteErrors(currentLeafPos)
                     next()
                     continue
                 }
 
-                const childNode = node.getChildNode(ctx.breedTree.map)
-                if (!childNode) {
+                const childLeaf = leaf.getChildLeaf(ctx.breedTree.map)
+                if (!childLeaf) {
                     break
                 }
 
-                const breedResult = PokemonBreed.breed(node, partnerNode, childNode)
+                const breedResult = PokemonBreed.breed(leaf, partnerLeaf, childLeaf)
 
                 if (!breedResult.ok) {
                     if (
                         breedResult.error.size === 1 &&
                         breedResult.error.has(PokemonBreed.BreedError.ChildDidNotChange)
                     ) {
-                        deleteErrors(currentNodePos)
+                        deleteErrors(currentLeafPos)
                         next()
                         continue
                     }
 
-                    addErrors(currentNodePos, breedResult.error)
+                    addErrors(currentLeafPos, breedResult.error)
                     next()
                     continue
                 }
 
-                if (childNode.isRootNode()) {
-                    deleteErrors(currentNodePos)
+                if (childLeaf.isRootLeaf()) {
+                    deleteErrors(currentLeafPos)
                     next()
                     continue
                 }
 
                 changed = true
-                childNode.setSpecies(breedResult)
+                childLeaf.setSpecies(breedResult)
 
-                if (childNode.species?.percentageMale === 0) {
-                    childNode.setGender(PokemonGender.Female)
-                } else if (childNode.species?.percentageMale === 100) {
-                    childNode.setGender(PokemonGender.Male)
-                } else if (childNode.isGenderless()) {
-                    childNode.setGender(PokemonGender.Genderless)
+                if (childLeaf.species?.percentageMale === 0) {
+                    childLeaf.setGender(PokemonGender.Female)
+                } else if (childLeaf.species?.percentageMale === 100) {
+                    childLeaf.setGender(PokemonGender.Male)
+                } else if (childLeaf.isGenderless()) {
+                    childLeaf.setGender(PokemonGender.Genderless)
                 }
 
-                deleteErrors(currentNodePos)
+                deleteErrors(currentLeafPos)
                 next()
             }
         }
@@ -279,20 +279,20 @@ function PokemonBreedTreeFinal() {
                                     const position = new PokemonBreedTreePosition(row, col)
 
                                     return (
-                                        <PokemonNodeLines
+                                        <PokemonLeafLines
                                             key={`node:${position.key()}`}
                                             position={position}
                                             rowLength={rowLength}
                                             breedTree={ctx.breedTree.map}
                                             breedErrors={breedErrors}
                                         >
-                                            <PokemonNodeSelect
+                                            <PokemonLeafSelect
                                                 desired31IvCount={desired31IvCount}
                                                 position={position}
                                                 breedTree={ctx.breedTree.map}
                                                 updateBreedTree={updateBreedTree}
                                             />
-                                        </PokemonNodeLines>
+                                        </PokemonLeafLines>
                                     )
                                 })}
                             </div>

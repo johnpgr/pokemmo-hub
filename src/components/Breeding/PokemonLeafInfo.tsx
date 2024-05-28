@@ -1,27 +1,27 @@
 import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useBreedTreeContext } from "./core/ctx/PokemonBreedTreeContext"
-import type { PokemonBreedTreeNode } from "./core/tree/BreedTreeNode"
+import type { PokemonBreedTreeLeaf } from "./core/tree/BreedTreeLeaf"
 import type { PokemonBreedTreeMap } from "./core/tree/useBreedTreeMap"
 import { getPokemonSpriteUrl } from "@/utils/sprites"
 import { Strings } from "@/utils"
-import { PokemonNodeGender } from "./PokemonNodeGender"
-import { HeldItem, PokemonNodeHeldItem, getHeldItemForNode } from "./PokemonNodeHeldItem"
-import { PokemonNodeNickname } from "./PokemonNodeNickname"
+import { PokemonLeafGender } from "./PokemonLeafGender"
+import { HeldItem, PokemonLeafHeldItem, getHeldItemForLeaf } from "./PokemonLeafHeldItem"
+import { PokemonLeafNickname } from "./PokemonLeafNickname"
 import { Button } from "@/components/ui/button"
 
-export function PokemonNodeInfo(props: {
+export function PokemonLeafInfo(props: {
     desired31IvCount: number
-    currentNode: PokemonBreedTreeNode
+    currentLeaf: PokemonBreedTreeLeaf
     breedTree: PokemonBreedTreeMap
     updateBreedTree: () => void
 }) {
     const ctx = useBreedTreeContext()
-    const heldItem = getHeldItemForNode(props.currentNode, props.breedTree)
+    const heldItem = getHeldItemForLeaf(props.currentLeaf, props.breedTree)
 
-    function resetNode() {
-        props.currentNode.setGender(undefined)
-        props.currentNode.setSpecies(undefined)
+    function resetLeaf() {
+        props.currentLeaf.setGender(undefined)
+        props.currentLeaf.setSpecies(undefined)
         props.updateBreedTree()
         ctx.saveToLocalStorage()
     }
@@ -30,71 +30,71 @@ export function PokemonNodeInfo(props: {
         <Card className="w-full md:max-w-64 md:ml-4 h-fit relative border-dark shadow">
             <CardHeader>
                 <CardTitle className="flex items-center">
-                    {props.currentNode && props.currentNode.species ? (
+                    {props.currentLeaf && props.currentLeaf.species ? (
                         <div className="flex items-center">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
-                                src={getPokemonSpriteUrl(props.currentNode.species.name)}
+                                src={getPokemonSpriteUrl(props.currentLeaf.species.name)}
                                 style={{
                                     imageRendering: "pixelated",
                                 }}
-                                alt={props.currentNode.species.name}
+                                alt={props.currentLeaf.species.name}
                                 className="mb-1"
                             />
-                            <PokemonNodeNickname
-                                currentNode={props.currentNode}
+                            <PokemonLeafNickname
+                                currentLeaf={props.currentLeaf}
                                 updateBreedTree={props.updateBreedTree}
                             />
                         </div>
                     ) : null}
                 </CardTitle>
-                {!props.currentNode.isRootNode() ? (
+                {!props.currentLeaf.isRootLeaf() ? (
                     <div className="absolute -top-4 -left-3 flex flex-col-reverse gap-1 items-center">
-                        <PokemonNodeGender
+                        <PokemonLeafGender
                             desired31IvCount={props.desired31IvCount}
-                            currentNode={props.currentNode}
+                            currentLeaf={props.currentLeaf}
                             breedTree={props.breedTree}
                             updateBreedTree={props.updateBreedTree}
                         />
-                        <PokemonNodeHeldItem
+                        <PokemonLeafHeldItem
                             item={
                                 //if not natured, ivs must exist.
-                                props.currentNode.nature ? HeldItem.Nature : heldItem!
+                                props.currentLeaf.nature ? HeldItem.Nature : heldItem!
                             }
                         />
                     </div>
                 ) : null}
             </CardHeader>
             <CardContent className="gap-1 flex flex-col pl-9">
-                {props.currentNode.ivs ? (
+                {props.currentLeaf.ivs ? (
                     <>
                         <p className="font-bold -mb-1">Ivs</p>
-                        {props.currentNode.ivs.map((iv) => (
+                        {props.currentLeaf.ivs.map((iv) => (
                             <span className="text-sm" key={Strings.random(4)}>
                                 31 {Strings.pascalToSpacedPascal(iv)}
                             </span>
                         ))}
                     </>
                 ) : null}
-                {props.currentNode.nature ? (
+                {props.currentLeaf.nature ? (
                     <>
                         <p className="font-bold -mb-1">Nature</p>
-                        <span className="text-sm">{props.currentNode.nature}</span>
+                        <span className="text-sm">{props.currentLeaf.nature}</span>
                     </>
                 ) : null}
-                {props.currentNode.species ? (
+                {props.currentLeaf.species ? (
                     <>
                         <p className="font-bold -mb-1">Egg Groups</p>
                         <p>
                             <span className="text-sm">
-                                {props.currentNode.species!.eggGroups[0]}
-                                {props.currentNode.species?.eggGroups[1]
-                                    ? `, ${props.currentNode.species.eggGroups[1]}`
+                                {props.currentLeaf.species!.eggGroups[0]}
+                                {props.currentLeaf.species?.eggGroups[1]
+                                    ? `, ${props.currentLeaf.species.eggGroups[1]}`
                                     : null}
                             </span>
                         </p>
-                        {!props.currentNode.isRootNode() ? (
-                            <Button onClick={resetNode} className="mt-2" variant={"destructive"} size={"sm"}>
+                        {!props.currentLeaf.isRootLeaf() ? (
+                            <Button onClick={resetLeaf} className="mt-2" variant={"destructive"} size={"sm"}>
                                 Reset
                             </Button>
                         ) : null}

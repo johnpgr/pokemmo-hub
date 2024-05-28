@@ -1,11 +1,11 @@
 import React from "react"
 import { PokemonBreederKind, PokemonIv, PokemonNature, PokemonSpecies, PokemonSpeciesUnparsed } from "../pokemon"
-import { PokemonBreedTreeNode } from "../tree/BreedTreeNode"
+import { PokemonBreedTreeLeaf } from "../tree/BreedTreeLeaf"
 import { UseBreedTreeMap, useBreedTreeMap } from "../tree/useBreedTreeMap"
 import { assert } from "@/utils/assert"
 import { useLocalStorage } from "usehooks-ts"
 import { PokemonIvSchema, PokemonNatureSchema } from "../pokemon"
-import { PokemonBreedTreeNodeSerializedSchema } from "../tree/BreedTreeNode"
+import { PokemonBreedTreeLeafSerializedSchema } from "../tree/BreedTreeLeaf"
 import { z } from "zod"
 
 export const PokemonBreedTreeSerializedSchema = z.object({
@@ -19,7 +19,7 @@ export const PokemonBreedTreeSerializedSchema = z.object({
         }),
         nature: PokemonNatureSchema.optional(),
     }),
-    breedTree: z.record(z.string(), PokemonBreedTreeNodeSerializedSchema),
+    breedTree: z.record(z.string(), PokemonBreedTreeLeafSerializedSchema),
 })
 export type PokemonBreedTreeSerialized = z.infer<typeof PokemonBreedTreeSerializedSchema>
 
@@ -64,7 +64,7 @@ export function BreedTreeContext(props: {
     const [ivs, setIvs] = React.useState<IVSet>(IVSet.DEFAULT)
     const [initMap, setInitMap] = React.useState(true)
     const breedTree = useBreedTreeMap({
-        finalPokemonNode: PokemonBreedTreeNode.ROOT({
+        finalPokemonLeaf: PokemonBreedTreeLeaf.ROOT({
             ivs: ivs,
             nature: nature,
             species: species,
@@ -88,10 +88,10 @@ export function BreedTreeContext(props: {
     }
 
     function deserialize(serialized: PokemonBreedTreeSerialized) {
-        const rootNode = serialized.breedTree["0,0"]
-        assert(rootNode, "Deserialize failed. Root node not found.")
+        const rootLeaf = serialized.breedTree["0,0"]
+        assert(rootLeaf, "Deserialize failed. Root node not found.")
 
-        const speciesUnparsed = props.pokemonSpeciesUnparsed.find((p) => p.number === rootNode.species)
+        const speciesUnparsed = props.pokemonSpeciesUnparsed.find((p) => p.number === rootLeaf.species)
         assert(speciesUnparsed, "Failed to import Pokemon to breed target species. Invalid Pokemon number")
 
         const species = PokemonSpecies.parse(speciesUnparsed)

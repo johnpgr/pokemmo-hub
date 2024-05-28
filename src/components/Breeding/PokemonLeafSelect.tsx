@@ -11,20 +11,20 @@ import { Check } from "lucide-react"
 import React from "react"
 import { useMediaQuery } from "usehooks-ts"
 import { getColorsByIvs } from "./PokemonIvColors"
-import { PokemonNodeInfo } from "./PokemonNodeInfo"
-import { IV_COLOR_DICT, IvColor, NODE_SCALE_BY_COLOR_AMOUNT, SPRITE_SCALE_BY_COLOR_AMOUNT } from "./consts"
-import { GENDERLESS_POKEMON_EVOLUTION_TREE } from "./core/consts"
+import { PokemonLeafInfo } from "./PokemonLeafInfo"
+import { IV_COLOR_DICT, IvColor, LEAF_SCALE_BY_COLOR_AMOUNT, SPRITE_SCALE_BY_COLOR_AMOUNT } from "./consts"
 import { useBreedTreeContext } from "./core/ctx/PokemonBreedTreeContext"
 import { PokemonEggGroup, PokemonGender, PokemonSpecies, PokemonSpeciesUnparsed } from "./core/pokemon"
 import type { PokemonBreedTreePosition } from "./core/tree/BreedTreePosition"
 import type { PokemonBreedTreeMap } from "./core/tree/useBreedTreeMap"
+import evolutions from "../../data/evolutions.json"
 
 enum SearchMode {
     All,
     EggGroupMatches,
 }
 
-export function PokemonNodeSelect(props: {
+export function PokemonLeafSelect(props: {
     desired31IvCount: number
     position: PokemonBreedTreePosition
     breedTree: PokemonBreedTreeMap
@@ -38,29 +38,29 @@ export function PokemonNodeSelect(props: {
     const [search, setSearch] = React.useState("")
     const [colors, setColors] = React.useState<IvColor[]>([])
     const isPokemonToBreed = props.position.col === 0 && props.position.row === 0
-    const currentNode = props.breedTree[props.position.key()]
-    assert(currentNode, "Current node should exist in PokemonNodeSelect")
+    const currentLeaf = props.breedTree[props.position.key()]
+    assert(currentLeaf, "Current leaf should exist in PokemonLeafSelect")
 
     function setPokemonSpecies(species: PokemonSpeciesUnparsed) {
-        assert(currentNode, `Node at ${props.position} should exist`)
-        currentNode.setSpecies(PokemonSpecies.parse(species))
+        assert(currentLeaf, `Leaf at ${props.position} should exist`)
+        currentLeaf.setSpecies(PokemonSpecies.parse(species))
 
         switch (true) {
-            case currentNode.isDitto():
-                currentNode.setGender(PokemonGender.Genderless)
+            case currentLeaf.isDitto():
+                currentLeaf.setGender(PokemonGender.Genderless)
                 break
-            case currentNode.isGenderless():
-                currentNode.setGender(PokemonGender.Genderless)
+            case currentLeaf.isGenderless():
+                currentLeaf.setGender(PokemonGender.Genderless)
                 break
-            case currentNode.species!.percentageMale === 0:
-                currentNode.setGender(PokemonGender.Female)
+            case currentLeaf.species!.percentageMale === 0:
+                currentLeaf.setGender(PokemonGender.Female)
                 break
-            case currentNode.species!.percentageMale === 100:
-                currentNode.setGender(PokemonGender.Male)
+            case currentLeaf.species!.percentageMale === 100:
+                currentLeaf.setGender(PokemonGender.Male)
                 break
-            case currentNode.gender === PokemonGender.Genderless:
-                //this means that previously at this node there was a Genderless Pokemon
-                currentNode.setGender(undefined)
+            case currentLeaf.gender === PokemonGender.Genderless:
+                //this means that previously at this leaf there was a Genderless Pokemon
+                currentLeaf.setGender(undefined)
                 break
         }
 
@@ -75,20 +75,18 @@ export function PokemonNodeSelect(props: {
     }
 
     const filterPokemonByEggGroups = React.useCallback((): PokemonSpeciesUnparsed[] => {
-        assert(ctx.breedTarget.species, "Pokemon in context should exist")
+        assert(ctx.breedTarget.species !== undefined, "Pokemon in context should exist")
         const newList: PokemonSpeciesUnparsed[] = []
 
         const ditto = ctx.pokemonSpeciesUnparsed.find((poke) => poke.number === 132)
-        assert(ditto, "Ditto should exist")
+        assert(ditto !== undefined, "Ditto should exist")
         newList.push(ditto)
 
         if (ctx.breedTarget.species.eggGroups.includes(PokemonEggGroup.Genderless)) {
-            const breedable =
-                GENDERLESS_POKEMON_EVOLUTION_TREE[
-                ctx.breedTarget.species.number as keyof typeof GENDERLESS_POKEMON_EVOLUTION_TREE
-                ]
+            const evolutionTree = evolutions.find((e) => e.includes(ctx.breedTarget.species!.number))
+            assert(evolutionTree !== undefined, "Every pokemon has to have it's evolution tree in evolutions.json")
 
-            return newList.concat(ctx.pokemonSpeciesUnparsed.filter((poke) => breedable.includes(poke.number)))
+            return newList.concat(ctx.pokemonSpeciesUnparsed.filter((poke) => evolutionTree.includes(poke.number)))
         }
 
         for (const poke of ctx.pokemonSpeciesUnparsed) {
@@ -107,32 +105,32 @@ export function PokemonNodeSelect(props: {
     }, [filterPokemonByEggGroups, searchMode, ctx.pokemonSpeciesUnparsed])
 
     React.useEffect(() => {
-        if (!currentNode || colors.length > 0) return
+        if (!currentLeaf || colors.length > 0) return
 
         const newColors: IvColor[] = []
 
-        if (currentNode.nature) {
+        if (currentLeaf.nature) {
             newColors.push(IV_COLOR_DICT["Nature"])
         }
 
-        if (currentNode.ivs) {
-            newColors.push(...getColorsByIvs(currentNode.ivs))
+        if (currentLeaf.ivs) {
+            newColors.push(...getColorsByIvs(currentLeaf.ivs))
         }
 
         setColors(newColors)
-    }, [colors.length, currentNode])
+    }, [colors.length, currentLeaf])
 
     if (isDesktop) {
         return (
             <Popover>
                 <PopoverTrigger className={cn(buttonVariants({ size: 'icon' }), "z-10 relative rounded-full bg-neutral-300 dark:bg-neutral-800 overflow-hidden")}
                     style={{
-                        scale: NODE_SCALE_BY_COLOR_AMOUNT[colors?.length ?? 1],
+                        scale: LEAF_SCALE_BY_COLOR_AMOUNT[colors?.length ?? 1],
                     }}
                 >
                     {colors?.map((color) => (
                         <div
-                            key={`PokemonNodeSelect:${id}:${color}`}
+                            key={`PokemonLeafSelect:${id}:${color}`}
                             style={{
                                 height: "100%",
                                 backgroundColor: color,
@@ -140,25 +138,25 @@ export function PokemonNodeSelect(props: {
                             }}
                         />
                     ))}
-                    {currentNode?.species ? (
+                    {currentLeaf?.species ? (
                         <img
-                            src={getPokemonSpriteUrl(currentNode.species.name)}
+                            src={getPokemonSpriteUrl(currentLeaf.species.name)}
                             style={{
                                 imageRendering: "pixelated",
                                 scale: SPRITE_SCALE_BY_COLOR_AMOUNT[colors?.length ?? 1],
                             }}
-                            alt={currentNode.species.name}
+                            alt={currentLeaf.species.name}
                             className="mb-1 absolute"
                         />
                     ) : null}
                 </PopoverTrigger>
                 <PopoverContent className="p-0 flex gap-4 w-full max-w-2xl bg-transparent shadow-none">
-                    {currentNode ? (
-                        <PokemonNodeInfo
+                    {currentLeaf ? (
+                        <PokemonLeafInfo
                             desired31IvCount={props.desired31IvCount}
                             breedTree={props.breedTree}
                             updateBreedTree={props.updateBreedTree}
-                            currentNode={currentNode}
+                            currentLeaf={currentLeaf}
                         />
                     ) : null}
                     {!isPokemonToBreed ? (
@@ -183,7 +181,7 @@ export function PokemonNodeSelect(props: {
                                     {pending
                                         ? Array.from({ length: 9 }).map((_, i) => (
                                             <CommandItem
-                                                key={`PokemonNodeSelectCommandItemPending${id}:${i}`}
+                                                key={`PokemonLeafSelectCommandItemPending${id}:${i}`}
                                                 value={""}
                                                 onSelect={() => { }}
                                             />
@@ -194,13 +192,13 @@ export function PokemonNodeSelect(props: {
                                             )
                                             .map((pokemon) => (
                                                 <CommandItem
-                                                    key={`PokemonNodeSelectCommandItem${id}:${pokemon.name}`}
+                                                    key={`PokemonLeafSelectCommandItem${id}:${pokemon.name}`}
                                                     value={pokemon.name}
                                                     onSelect={() => setPokemonSpecies(pokemon)}
                                                     data-cy={`${pokemon.name}-value`}
                                                     className="relative"
                                                 >
-                                                    {currentNode.species?.name === pokemon.name ? (
+                                                    {currentLeaf.species?.name === pokemon.name ? (
                                                         <Check className="h-4 w-4 absolute top-1/2 -translate-y-1/2 left-2" />
                                                     ) : null}
                                                     <span className="pl-6">
@@ -221,12 +219,12 @@ export function PokemonNodeSelect(props: {
         <Drawer>
             <DrawerTrigger
                 style={{
-                    scale: NODE_SCALE_BY_COLOR_AMOUNT[colors?.length ?? 1],
+                    scale: LEAF_SCALE_BY_COLOR_AMOUNT[colors?.length ?? 1],
                 }}
                 className={cn(buttonVariants({ size: "icon" }), "z-10 relative rounded-full bg-neutral-300 dark:bg-neutral-800 overflow-hidden")}>
                 {colors?.map((color) => (
                     <div
-                        key={`PokemonNodeSelect:${id}:${color}`}
+                        key={`PokemonLeafSelect:${id}:${color}`}
                         style={{
                             height: "100%",
                             backgroundColor: color,
@@ -234,14 +232,14 @@ export function PokemonNodeSelect(props: {
                         }}
                     />
                 ))}
-                {currentNode?.species ? (
+                {currentLeaf?.species ? (
                     <img
-                        src={getPokemonSpriteUrl(currentNode.species.name)}
+                        src={getPokemonSpriteUrl(currentLeaf.species.name)}
                         style={{
                             imageRendering: "pixelated",
                             scale: SPRITE_SCALE_BY_COLOR_AMOUNT[colors?.length ?? 1],
                         }}
-                        alt={currentNode.species.name}
+                        alt={currentLeaf.species.name}
                         className="mb-1 absolute"
                     />
                 ) : null}
@@ -269,7 +267,7 @@ export function PokemonNodeSelect(props: {
                                 {pending
                                     ? Array.from({ length: 9 }).map((_, i) => (
                                         <CommandItem
-                                            key={`PokemonNodeSelectCommandItemPending${id}:${i}`}
+                                            key={`PokemonLeafSelectCommandItemPending${id}:${i}`}
                                             value={""}
                                             onSelect={() => { }}
                                         />
@@ -280,13 +278,13 @@ export function PokemonNodeSelect(props: {
                                         )
                                         .map((pokemon) => (
                                             <CommandItem
-                                                key={`PokemonNodeSelectCommandItem${id}:${pokemon.name}`}
+                                                key={`PokemonLeafSelectCommandItem${id}:${pokemon.name}`}
                                                 value={pokemon.name}
                                                 onSelect={() => setPokemonSpecies(pokemon)}
                                                 data-cy={`${pokemon.name}-value`}
                                                 className="relative"
                                             >
-                                                {currentNode.species?.name === pokemon.name ? (
+                                                {currentLeaf.species?.name === pokemon.name ? (
                                                     <Check className="h-4 w-4 absolute top-1/2 -translate-y-1/2 left-2" />
                                                 ) : null}
                                                 <span className="pl-6">
@@ -298,12 +296,12 @@ export function PokemonNodeSelect(props: {
                         </CommandGroup>
                     </Command>
                 ) : null}
-                {currentNode ? (
-                    <PokemonNodeInfo
+                {currentLeaf ? (
+                    <PokemonLeafInfo
                         desired31IvCount={props.desired31IvCount}
                         breedTree={props.breedTree}
                         updateBreedTree={props.updateBreedTree}
-                        currentNode={currentNode}
+                        currentLeaf={currentLeaf}
                     />
                 ) : null}
             </DrawerContent>

@@ -5,7 +5,7 @@ import type { PokemonIv, PokemonNature, PokemonSpecies } from "@/components/Bree
 import { assert } from "@/utils/assert"
 import { Try } from "@/utils/results"
 import { run } from "@/utils"
-import { Info, PlayIcon, RotateCcw } from "lucide-react"
+import { PlayIcon, RotateCcw } from "lucide-react"
 import React from "react"
 import { generateErrorMessage } from "zod-error"
 import { PokemonIvSelect } from "./PokemonIvSelect"
@@ -16,21 +16,21 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { JsonImportButton } from "./Buttons"
 
 /**
- * This type is used to represent the state of the full Pokemon node that is going to be used in the PokemonToBreedContext
+ * This type is used to represent the state of the full Pokemon node that is going to be used in the PokemonBreedTreeContext
  * It is a state object that will change as the user changes the select fields
  */
-export type PokemonNodeInSelect = {
+export type PokemonLeafInSelect = {
     species?: PokemonSpecies
     nature?: PokemonNature
     ivs: Set<PokemonIv>
 }
 
-export function PokemonToBreedSelect() {
+export function PokemonBreedSelect() {
     const { toast } = useToast()
     const ctx = useBreedTreeContext()
     const [desired31IVCount, setDesired31IVCount] = React.useState(2)
     const [currentIVDropdownValues, setCurrentIVDropdownValues] = React.useState(DEFAULT_IV_DROPDOWN_VALUES)
-    const [currentPokemonInSelect, setCurrentPokemonInSelect] = React.useState<PokemonNodeInSelect>({
+    const [currentPokemonInSelect, setCurrentPokemonInSelect] = React.useState<PokemonLeafInSelect>({
         ivs: new Set(DEFAULT_IV_DROPDOWN_VALUES.slice(0, desired31IVCount)),
     })
     const expectedCost = getExpectedBreedCost(desired31IVCount, Boolean(currentPokemonInSelect.nature))
@@ -132,8 +132,8 @@ export function PokemonToBreedSelect() {
                 <div className="flex w-full flex-col gap-2">
                     <div className="flex justify-between items-end">
                         <PokemonSpeciesSelect
-                            currentSelectedNode={currentPokemonInSelect}
-                            setCurrentSelectedNode={setCurrentPokemonInSelect}
+                            currentSelectedLeaf={currentPokemonInSelect}
+                            setCurrentSelectedLeaf={setCurrentPokemonInSelect}
                         />
                         <JsonImportButton handleImportJson={handleImportJson} />
                     </div>

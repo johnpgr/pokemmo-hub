@@ -39,6 +39,7 @@ export function JsonImportButton(props: { handleImportJson: (data: string) => vo
         <Popover>
             <PopoverTrigger className={cn(buttonVariants({ variant: "secondary" }), "gap-2")} type="button">
                 <Import size={16} />
+                {/* TODO: i18n */}
                 Import
             </PopoverTrigger>
             <PopoverContent className="flex flex-col gap-4 w-96">
@@ -54,6 +55,7 @@ export function JsonImportButton(props: { handleImportJson: (data: string) => vo
                 </pre>
                 <Button className="gap-1" onClick={() => props.handleImportJson(jsonData)}>
                     <Save size={16} />
+                    {/* TODO: i18n */}
                     Save
                 </Button>
             </PopoverContent>
@@ -74,6 +76,7 @@ export function ImportExportButton(props: { handleExport: () => string }) {
             const errorMsg = generateZodErrorMessage(res.error.issues)
 
             toast({
+                // TODO: i18n
                 title: "Failed to save the breed tree JSON content.",
                 description: errorMsg,
                 variant: "destructive",
@@ -84,6 +87,7 @@ export function ImportExportButton(props: { handleExport: () => string }) {
         const deserialized = Try(() => ctx.deserialize(res.data))
         if (!deserialized.ok) {
             toast({
+                // TODO: i18n
                 title: "Failed to save the breed tree JSON content.",
                 description: (deserialized.error as Error).message ?? "",
                 variant: "destructive",
@@ -98,6 +102,7 @@ export function ImportExportButton(props: { handleExport: () => string }) {
                 type="button"
                 onClick={() => setJsonData(props.handleExport())}>
                 <Import size={16} />
+                {/* TODO: i18n */}
                 Import/Export
             </PopoverTrigger>
             <PopoverContent className="relative flex flex-col gap-4 w-96">
@@ -120,13 +125,17 @@ export function ImportExportButton(props: { handleExport: () => string }) {
                                     .writeText(jsonData)
                                     .then(() => {
                                         toast({
+                                            // TODO: i18n
                                             title: "Copy success.",
+                                            // TODO: i18n
                                             description: "The current breed state was copied to your clipboard.",
                                         })
                                     })
                                     .catch(() => {
                                         toast({
+                                            // TODO: i18n
                                             title: "Copy failed.",
+                                            // TODO: i18n
                                             description: "Failed to copy breed contents.",
                                         })
                                     })
@@ -134,6 +143,7 @@ export function ImportExportButton(props: { handleExport: () => string }) {
                         >
                             <ClipboardCopy size={16} />
                         </TooltipTrigger>
+                        {/* TODO: i18n */}
                         <TooltipContent>Copy to clipboard</TooltipContent>
                     </Tooltip>
                 </TooltipProvider>
@@ -159,10 +169,12 @@ export function ResetBreedButton(props: { handleRestartBreed: () => void }) {
                     Reset
                 </DialogTrigger>
                 <DialogContent
-                    className="sm:max-w-[425px]">
+                    className="sm:max-w-[425px] border-dark">
                     <DialogHeader>
+                        {/* TODO: i18n */}
                         <DialogTitle>Reset current breed</DialogTitle>
-                        <DialogDescription>
+                        <DialogDescription className="text-foreground/90">
+                            {/* TODO: i18n */}
                             Are you sure you want to reset the current breed?
                             <br />
                             All progress will be lost.
@@ -170,6 +182,7 @@ export function ResetBreedButton(props: { handleRestartBreed: () => void }) {
                     </DialogHeader>
                     <DialogFooter>
                         <Button variant={"destructive"} onClick={props.handleRestartBreed}>
+                            {/* TODO: i18n */}
                             Confirm
                         </Button>
                     </DialogFooter>
@@ -188,12 +201,15 @@ export function ResetBreedButton(props: { handleRestartBreed: () => void }) {
             </DrawerTrigger>
             <DrawerContent>
                 <DrawerHeader className="text-left">
+                    {/* TODO: i18n */}
                     <DrawerTitle>Reset current breed</DrawerTitle>
                     <DrawerDescription>
+                        {/* TODO: i18n */}
                         Are you sure you want to reset the current breed? All progress will be lost.
                     </DrawerDescription>
                 </DrawerHeader>
                 <DrawerFooter className="pt-2">
+                    {/* TODO: i18n */}
                     <DrawerClose>
                         Confirm
                     </DrawerClose>

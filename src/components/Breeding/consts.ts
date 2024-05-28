@@ -71,7 +71,7 @@ export const IV_COLOR_DICT = {
 } as const
 export type IvColor = (typeof IV_COLOR_DICT)[keyof typeof IV_COLOR_DICT]
 
-export const NODE_SCALE_BY_COLOR_AMOUNT: Record<number, string> = {
+export const LEAF_SCALE_BY_COLOR_AMOUNT: Record<number, string> = {
     5: '100%',
     4: '90%',
     3: '80%',

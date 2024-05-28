@@ -3,7 +3,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PokemonIv } from "./core/pokemon"
 import { Strings } from "@/utils"
 import React from "react"
-import type { PokemonNodeInSelect } from "./PokemonBreedSelect"
+import type { PokemonLeafInSelect } from "./PokemonBreedSelect"
 import { PokemonIvRadioGroup, PokemonIvRadioItem } from "./PokemonIvRadio"
 import { IV_DROPDOWN_LIST_VALUES } from "./consts"
 
@@ -13,8 +13,8 @@ export function PokemonIvSelect(props: {
     setDesired31IVCount: React.Dispatch<React.SetStateAction<number>>
     currentIVDropdownValues: PokemonIv[]
     setCurrentIVDropdownValues: React.Dispatch<React.SetStateAction<PokemonIv[]>>
-    currentPokemonInSelect: PokemonNodeInSelect
-    setCurrentPokemonInSelect: React.Dispatch<React.SetStateAction<PokemonNodeInSelect>>
+    currentPokemonInSelect: PokemonLeafInSelect
+    setCurrentPokemonInSelect: React.Dispatch<React.SetStateAction<PokemonLeafInSelect>>
 }) {
     function handleDesired31IvCountChange(number: string) {
         const value = parseInt(number)

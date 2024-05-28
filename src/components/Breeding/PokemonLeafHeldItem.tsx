@@ -4,10 +4,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Strings, cn } from "@/utils"
 import { getEvItemSpriteUrl } from "@/utils/sprites"
 import { PokemonIv } from "./core/pokemon"
-import { PokemonBreedTreeNode } from "./core/tree/BreedTreeNode"
+import { PokemonBreedTreeLeaf } from "./core/tree/BreedTreeLeaf"
 import { PokemonBreedTreeMap } from "./core/tree/useBreedTreeMap"
 
-export function PokemonNodeHeldItem(props: { item: HeldItem }) {
+export function PokemonLeafHeldItem(props: { item: HeldItem }) {
     return (
         <TooltipProvider delayDuration={250}>
             <Tooltip>
@@ -20,7 +20,7 @@ export function PokemonNodeHeldItem(props: { item: HeldItem }) {
                         }}
                     />
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent className='border-dark shadow'>
                     <p className='m-0'>{Strings.kebabToSpacedPascal(props.item)}</p>
                 </TooltipContent>
             </Tooltip>
@@ -38,8 +38,8 @@ export enum HeldItem {
     Nature = "everstone",
 }
 
-export function getHeldItemForNode(node: PokemonBreedTreeNode, breedTree: PokemonBreedTreeMap): HeldItem | null {
-    const breedPartner = node.getPartnerNode(breedTree)
+export function getHeldItemForLeaf(node: PokemonBreedTreeLeaf, breedTree: PokemonBreedTreeMap): HeldItem | null {
+    const breedPartner = node.getPartnerLeaf(breedTree)
 
     if (!breedPartner) {
         return null

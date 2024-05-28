@@ -1,26 +1,6 @@
 import { assert } from '@/utils/assert'
 import { z } from 'zod'
 
-export enum PokemonType {
-    Fire = 'Fire',
-    Water = 'Water',
-    Grass = 'Grass',
-    Electric = 'Electric',
-    Flying = 'Flying',
-    Normal = 'Normal',
-    Bug = 'Bug',
-    Poison = 'Poison',
-    Ground = 'Ground',
-    Rock = 'Rock',
-    Fighting = 'Fighting',
-    Psychic = 'Psychic',
-    Ghost = 'Ghost',
-    Ice = 'Ice',
-    Dragon = 'Dragon',
-    Dark = 'Dark',
-    Steel = 'Steel',
-}
-
 export enum PokemonNature {
     Hardy = 'Hardy',
     Lonely = 'Lonely',
@@ -61,6 +41,7 @@ export enum PokemonEggGroup {
     Fairy = 'Fairy',
     Plant = 'Plant',
     Humanoid = 'Humanoid',
+    Mineral = 'Mineral',
     Chaos = 'Chaos',
     Ditto = 'Ditto',
     Dragon = 'Dragon',
@@ -88,7 +69,6 @@ export const PokemonGenderSchema = z.nativeEnum(PokemonGender)
 export type PokemonSpeciesUnparsed = {
     number: number
     name: string
-    types: string[]
     eggGroups: string[]
     percentageMale: number
 }
@@ -97,35 +77,27 @@ export class PokemonSpecies {
     constructor(
         public number: number,
         public name: string,
-        public types: [PokemonType, PokemonType?],
         public eggGroups: [PokemonEggGroup, PokemonEggGroup?],
         public percentageMale: number,
     ) {}
 
     static parse(data: PokemonSpeciesUnparsed): PokemonSpecies {
-        const types = Object.values(PokemonType)
         const eggGroups = Object.values(PokemonEggGroup)
-
-        assert(types.includes(data.types[0]!), 'Invalid type')
-        if (data.types[1]) {
-            assert(types.includes(data.types[1]), 'Invalid type')
-        }
 
         assert(
             eggGroups.includes(data.eggGroups[0]!),
-            `Invalid egg group ${data.eggGroups[0]} valids are ${eggGroups}`,
+            `[PokemonSpecies.parse] Invalid egg group ${data.eggGroups[0]}`,
         )
         if (data.eggGroups[1]) {
             assert(
                 eggGroups.includes(data.eggGroups[1]),
-                `Invalid egg group ${data.eggGroups[1]} valids are ${eggGroups}`,
+                `[PokemonSpecies.parse] Invalid egg group ${data.eggGroups[1]}`,
             )
         }
 
         return new PokemonSpecies(
             data.number,
             data.name,
-            [data.types[0] as PokemonType, data.types[1] as PokemonType],
             [
                 data.eggGroups[0] as PokemonEggGroup,
                 data.eggGroups[1] as PokemonEggGroup | undefined,
@@ -135,7 +107,7 @@ export class PokemonSpecies {
     }
 }
 
-/** In Pokemmo, in breeding, you can only breed a pokemon couple once.
+/** In Pokemmo breeding, you can only breed a pokemon couple once.
  * You lose the parents on a breed, and receive the offspring.
  * That's why we need a certain number of pokemon kind, grouped here by a, b, c, d, e & nature.
  * https://pokemmo.shoutwiki.com/wiki/Breeding

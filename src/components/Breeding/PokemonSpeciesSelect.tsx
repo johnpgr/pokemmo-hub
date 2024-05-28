@@ -7,20 +7,20 @@ import { PokemonSpecies, PokemonSpeciesUnparsed } from "./core/pokemon"
 import { getPokemonSpriteUrl } from "@/utils/sprites"
 import { Check, ChevronsUpDown } from "lucide-react"
 import React from "react"
-import type { PokemonNodeInSelect } from "./PokemonBreedSelect"
+import type { PokemonLeafInSelect } from "./PokemonBreedSelect"
 import { useBreedTreeContext } from "./core/ctx/PokemonBreedTreeContext"
 import { cn } from "@/utils"
 
 export function PokemonSpeciesSelect(props: {
-    currentSelectedNode: PokemonNodeInSelect
-    setCurrentSelectedNode: React.Dispatch<React.SetStateAction<PokemonNodeInSelect>>
+    currentSelectedLeaf: PokemonLeafInSelect
+    setCurrentSelectedLeaf: React.Dispatch<React.SetStateAction<PokemonLeafInSelect>>
 }) {
     const ctx = useBreedTreeContext()
     const [isOpen, setIsOpen] = React.useState(false)
     const [search, setSearch] = React.useState("")
 
     function handleSpeciesSelect(pokemon: PokemonSpeciesUnparsed) {
-        props.setCurrentSelectedNode((prev) => ({
+        props.setCurrentSelectedLeaf((prev) => ({
             ...prev,
             species: PokemonSpecies.parse(pokemon),
         }))
@@ -31,19 +31,19 @@ export function PokemonSpeciesSelect(props: {
         <div>
             <p className="text-foreground/70 text-sm m-0 pb-2">What Pokémon species?</p>
             <Popover open={isOpen} onOpenChange={setIsOpen}>
-                <PopoverTrigger type='button' className={cn(buttonVariants({ variant: 'popover' }), `border border-dark ${props.currentSelectedNode.species ? "pl-2" : "pl-4"}`)}>
-                    {props.currentSelectedNode?.species ? (
+                <PopoverTrigger type='button' className={cn(buttonVariants({ variant: 'popover' }), `border border-dark ${props.currentSelectedLeaf.species ? "pl-2" : "pl-4"}`)}>
+                    {props.currentSelectedLeaf?.species ? (
                         <img
                             className="top-[1px] left-0"
-                            src={getPokemonSpriteUrl(props.currentSelectedNode.species?.name)}
+                            src={getPokemonSpriteUrl(props.currentSelectedLeaf.species?.name)}
                             style={{
                                 imageRendering: "pixelated",
                             }}
-                            alt={props.currentSelectedNode.species.name}
+                            alt={props.currentSelectedLeaf.species.name}
                         />
                     ) : null}
-                    {props.currentSelectedNode?.species
-                        ? props.currentSelectedNode.species.name
+                    {props.currentSelectedLeaf?.species
+                        ? props.currentSelectedLeaf.species.name
                         : "Select a Pokemon"}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </PopoverTrigger>
@@ -68,7 +68,7 @@ export function PokemonSpeciesSelect(props: {
                                             data-cy={`${pokemon.name}-value`}
                                             className="relative"
                                         >
-                                            {props.currentSelectedNode.species?.name === pokemon.name ? (
+                                            {props.currentSelectedLeaf.species?.name === pokemon.name ? (
                                                 <Check className="h-4 w-4 absolute top-1/2 -translate-y-1/2 left-2" />
                                             ) : null}
                                             <span className="pl-6">

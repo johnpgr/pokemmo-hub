@@ -6,12 +6,12 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { PokemonNature } from "./core/pokemon"
 import { Check, ChevronsUpDown } from "lucide-react"
 import React from "react"
-import type { PokemonNodeInSelect } from "./PokemonBreedSelect"
+import type { PokemonLeafInSelect } from "./PokemonBreedSelect"
 import { cn } from "@/utils"
 
 export function PokemonNatureSelect(props: {
-    currentPokemonInSelect: PokemonNodeInSelect
-    setCurrentPokemonInSelect: React.Dispatch<React.SetStateAction<PokemonNodeInSelect>>
+    currentPokemonInSelect: PokemonLeafInSelect
+    setCurrentPokemonInSelect: React.Dispatch<React.SetStateAction<PokemonLeafInSelect>>
 }) {
     const [isOpen, setIsOpen] = React.useState(false)
     const [search, setSearch] = React.useState("")

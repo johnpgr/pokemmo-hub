@@ -1,41 +1,41 @@
 import React from 'react'
 import { HelpCircle } from "lucide-react"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { PokemonGender } from "./core/pokemon"
 import { Female } from "@/components/ui/icons/Female"
 import { Male } from "@/components/ui/icons/Male"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { GENDER_GUARANTEE_COST_BY_PERCENTAGE_MALE } from "./consts"
-import { PokemonBreedTreeNode } from "./core/tree/BreedTreeNode"
+import { PokemonBreedTreeLeaf } from "./core/tree/BreedTreeLeaf"
 import { PokemonBreedTreeMap } from "./core/tree/useBreedTreeMap"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useBreedTreeContext } from "./core/ctx/PokemonBreedTreeContext"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/utils"
 
-export function PokemonNodeGender(props: {
+export function PokemonLeafGender(props: {
     desired31IvCount: number
-    currentNode: PokemonBreedTreeNode
+    currentLeaf: PokemonBreedTreeLeaf
     breedTree: PokemonBreedTreeMap
     updateBreedTree: () => void
 }) {
     const ctx = useBreedTreeContext()
-    const gender = props.currentNode.gender
-    const percentageMale = props.currentNode.species?.percentageMale
+    const gender = props.currentLeaf.gender
+    const percentageMale = props.currentLeaf.species?.percentageMale
     const isLastRow = ctx.breedTarget.nature
-        ? props.currentNode.position.row === props.desired31IvCount
-        : props.currentNode.position.row === props.desired31IvCount - 1
-    const canHaveGenderCost = !props.currentNode.isGenderless() && !props.currentNode.isDitto() && !isLastRow
+        ? props.currentLeaf.position.row === props.desired31IvCount
+        : props.currentLeaf.position.row === props.desired31IvCount - 1
+    const canHaveGenderCost = !props.currentLeaf.isGenderless() && !props.currentLeaf.isDitto() && !isLastRow
 
     function handleToggleGenderCostIgnored() {
-        props.currentNode.setGenderCostIgnored(!props.currentNode.genderCostIgnored)
+        props.currentLeaf.setGenderCostIgnored(!props.currentLeaf.genderCostIgnored)
         props.updateBreedTree()
         ctx.saveToLocalStorage()
     }
 
     function handleToggleGender(value: string) {
-        props.currentNode.setGender(value as PokemonGender)
+        props.currentLeaf.setGender(value as PokemonGender)
         props.updateBreedTree()
         ctx.saveToLocalStorage()
     }
@@ -43,7 +43,7 @@ export function PokemonNodeGender(props: {
     return (
         <Popover>
             <PopoverTrigger className={cn(buttonVariants({ variant: "outline" }), "rounded-full border border-dark p-[6px] h-fit w-fit")}>
-                {!gender || props.currentNode.isGenderless() || props.currentNode.isDitto() ? (
+                {!gender || props.currentLeaf.isGenderless() || props.currentLeaf.isDitto() ? (
                     <HelpCircle size={20} />
                 ) : gender === PokemonGender.Female ? (
                     <Female className="h-5 w-5 fill-pink-500 antialiased" />
@@ -51,9 +51,9 @@ export function PokemonNodeGender(props: {
                     <Male className="h-5 w-5 fill-blue-500 antialiased" />
                 )}
             </PopoverTrigger>
-            <PopoverContent className="max-w-xs w-full">
+            <PopoverContent className="max-w-xs w-full shadow border border-dark">
                 <div className="flex flex-col items-center gap-6">
-                    {props.currentNode.isGenderless() || props.currentNode.isDitto() ? (
+                    {props.currentLeaf.isGenderless() || props.currentLeaf.isDitto() ? (
                         <i className="text-sm text-foreground/70">This Pokemon species can&apos;t have a gender</i>
                     ) : (
                         <>
@@ -78,7 +78,7 @@ export function PokemonNodeGender(props: {
                                     <Male className="fill-blue-500 h-6 w-6 antialiased" />
                                 </ToggleGroupItem>
                             </ToggleGroup>
-                            {props.currentNode.species ? (
+                            {props.currentLeaf.species ? (
                                 <>
                                     <div
                                         className={`space-y-2 ${percentageMale === 100 || percentageMale === 0 ? "opacity-50" : ""}`}
@@ -88,7 +88,7 @@ export function PokemonNodeGender(props: {
                                             {
                                                 GENDER_GUARANTEE_COST_BY_PERCENTAGE_MALE[
                                                 (100 -
-                                                    props.currentNode.species
+                                                    props.currentLeaf.species
                                                         .percentageMale) as keyof typeof GENDER_GUARANTEE_COST_BY_PERCENTAGE_MALE
                                                 ]
                                             }
@@ -97,7 +97,7 @@ export function PokemonNodeGender(props: {
                                             <Male className="fill-blue-500 h-4 w-4 antialiased" />:{" $"}
                                             {
                                                 GENDER_GUARANTEE_COST_BY_PERCENTAGE_MALE[
-                                                props.currentNode.species
+                                                props.currentLeaf.species
                                                     .percentageMale as keyof typeof GENDER_GUARANTEE_COST_BY_PERCENTAGE_MALE
                                                 ]
                                             }
@@ -108,7 +108,7 @@ export function PokemonNodeGender(props: {
                                             <Checkbox
                                                 className="border-foreground/50"
                                                 id="ignore-g"
-                                                checked={props.currentNode.genderCostIgnored}
+                                                checked={props.currentLeaf.genderCostIgnored}
                                                 onCheckedChange={handleToggleGenderCostIgnored}
                                             />
                                             <Label htmlFor="ignore-g" className="text-foreground/70">
