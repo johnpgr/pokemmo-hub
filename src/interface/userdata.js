@@ -1,21 +1,17 @@
-import { BERRIES_FAVORITES, DEFAULT_ACCOUNT_BERRY } from "./berries"
-import { DEFAULT_BREDS, DEFAULT_BREEDING_CONFIG } from "./breeding"
+import { BERRIES_FAVORITES, DEFAULT_ACCOUNT_BERRY } from './berries'
 
 export const DEFAULT_USER_DATA = {
     berries: {
         planted: DEFAULT_ACCOUNT_BERRY,
-        favorites: BERRIES_FAVORITES
-    },
-    breeding: {
-        config: DEFAULT_BREEDING_CONFIG,
-        breds: DEFAULT_BREDS
+        favorites: BERRIES_FAVORITES,
     },
     market: {
         investments: [],
-        wishlist: []
+        wishlist: [],
     },
-    discordId: "",
-    language: "en",
+    discordId: '',
+    language: 'en',
     notifications: [],
-    isDark: true
+    isDark: true,
 }
+

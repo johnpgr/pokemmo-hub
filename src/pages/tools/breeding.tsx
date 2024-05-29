@@ -7,9 +7,9 @@ import { useTranslations } from '../../context/TranslationsContext'
 import { PokemonBreedSelect } from "@/components/Breeding/PokemonBreedSelect"
 import { PokemonBreedTree } from "@/components/Breeding/PokemonBreedTree"
 import { BreedTreeContext } from "@/components/Breeding/core/ctx/PokemonBreedTreeContext"
-import pokemons from "@/data/pokemmo/breeding-monster.json"
 import { Toaster } from "@/components/ui/toaster"
 import { Toaster as ToasterSonner } from "@/components/ui/sonner"
+import "../../global-tw.css"
 
 const Breeding = ({ pageContext }: any) => {
     const { t } = useTranslations()
@@ -17,24 +17,21 @@ const Breeding = ({ pageContext }: any) => {
 
     return (
         <Page breadcrumbs={pageContext.breadcrumb} label={PAGE_TITLE}>
-            {/* @ts-ignore */}
+            <Toaster />
+            <ToasterSonner />
             <PageTitle>{t(PAGE_TITLE)}</PageTitle>
-            <BreedTreeContext pokemonSpeciesUnparsed={pokemons}>
+            <BreedTreeContext>
                 <Information title={t("How to use the breeding tool")}>
                     {t("breedingToolExplanationModal")}
                 </Information>
                 <PokemonBreedSelect />
                 <PokemonBreedTree />
             </BreedTreeContext>
-            <Toaster />
-            <ToasterSonner />
         </Page>
     )
 }
 
 export default Breeding
 
-
 const description = "A guide for breeding in PokeMMO. The calculator will show you a pattern easy to follow. Select how many IVs do you need and enjoy the solution."
-//@ts-ignore
 export const Head = () => <Seo title="Breeding Guide Simulator" description={description}></Seo>

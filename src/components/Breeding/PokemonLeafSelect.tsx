@@ -1,4 +1,4 @@
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command"
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer"
@@ -17,7 +17,8 @@ import { useBreedTreeContext } from "./core/ctx/PokemonBreedTreeContext"
 import { PokemonEggGroup, PokemonGender, PokemonSpecies, PokemonSpeciesUnparsed } from "./core/pokemon"
 import type { PokemonBreedTreePosition } from "./core/tree/BreedTreePosition"
 import type { PokemonBreedTreeMap } from "./core/tree/useBreedTreeMap"
-import evolutions from "../../data/evolutions.json"
+import evolutions from "@/data/evolutions.json"
+import pokemons from "@/data/pokemmo/monster-breeding-sim.json"
 
 enum SearchMode {
     All,
@@ -78,7 +79,7 @@ export function PokemonLeafSelect(props: {
         assert(ctx.breedTarget.species !== undefined, "Pokemon in context should exist")
         const newList: PokemonSpeciesUnparsed[] = []
 
-        const ditto = ctx.pokemonSpeciesUnparsed.find((poke) => poke.number === 132)
+        const ditto = pokemons.find((poke) => poke.number === 132)
         assert(ditto !== undefined, "Ditto should exist")
         newList.push(ditto)
 
@@ -86,10 +87,10 @@ export function PokemonLeafSelect(props: {
             const evolutionTree = evolutions.find((e) => e.includes(ctx.breedTarget.species!.number))
             assert(evolutionTree !== undefined, "Every pokemon has to have it's evolution tree in evolutions.json")
 
-            return newList.concat(ctx.pokemonSpeciesUnparsed.filter((poke) => evolutionTree.includes(poke.number)))
+            return newList.concat(pokemons.filter((poke) => evolutionTree.includes(poke.number)))
         }
 
-        for (const poke of ctx.pokemonSpeciesUnparsed) {
+        for (const poke of pokemons) {
             if (!poke.eggGroups.some((e) => ctx.breedTarget.species!.eggGroups.includes(e))) {
                 continue
             }
@@ -98,11 +99,11 @@ export function PokemonLeafSelect(props: {
         }
 
         return newList
-    }, [ctx.breedTarget.species, ctx.pokemonSpeciesUnparsed])
+    }, [ctx.breedTarget.species, pokemons])
 
     const pokemonList = React.useMemo(() => {
-        return searchMode === SearchMode.All ? ctx.pokemonSpeciesUnparsed : filterPokemonByEggGroups()
-    }, [filterPokemonByEggGroups, searchMode, ctx.pokemonSpeciesUnparsed])
+        return searchMode === SearchMode.All ? pokemons : filterPokemonByEggGroups()
+    }, [filterPokemonByEggGroups, searchMode, pokemons])
 
     React.useEffect(() => {
         if (!currentLeaf || colors.length > 0) return

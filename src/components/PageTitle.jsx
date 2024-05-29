@@ -2,7 +2,15 @@ import React from 'react';
 import { useTranslations } from '../context/TranslationsContext';
 import { Typography } from './Atoms';
 
-export function PageTitle({ credits, children, className = 'mb-3 mt-2', callToAction = false }) {
+/**
+    * @typedef PageTitleProps
+    * @property {string} [credits]
+    * @property {React.ReactNode} children
+    * @property {string} [className]
+    * @property {boolean} [callToAction]
+*/
+
+export function PageTitle(/**@type {PageTitleProps}*/ { credits, children, className = 'mb-3 mt-2', callToAction = false }) {
     const { t } = useTranslations();
     return (
         <div className={className}>
@@ -21,8 +29,6 @@ export function PageTitle({ credits, children, className = 'mb-3 mt-2', callToAc
                     </div>
                     : false
             }
-
-
         </div>
     )
 }

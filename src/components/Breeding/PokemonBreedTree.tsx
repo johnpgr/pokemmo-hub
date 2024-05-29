@@ -5,7 +5,6 @@ import { PokemonBreedTreePosition } from "./core/tree/BreedTreePosition"
 import { PokemonBreedTreePositionKey } from "./core/tree/useBreedTreeMap"
 import { assert } from "@/utils/assert"
 import { run } from "@/utils"
-import { Info } from "lucide-react"
 import React from "react"
 import { toast } from "sonner"
 import { getExpectedBreedCost } from "./PokemonBreedSelect"
@@ -51,30 +50,30 @@ function PokemonBreedTreeFinal() {
     const expectedCost = getExpectedBreedCost(desired31IvCount, Boolean(ctx.breedTarget.nature))
     const currentBreedCost = run(() => {
         let cost = 0
-        const nodes = Object.values(ctx.breedTree.map)
+        const leafs = Object.values(ctx.breedTree.map)
 
-        for (const node of nodes) {
-            if (!node.species) {
+        for (const leaf of leafs) {
+            if (!leaf.species) {
                 continue
             }
 
             const isLastRow = ctx.breedTarget.nature
-                ? node.position.row === desired31IvCount
-                : node.position.row === desired31IvCount - 1
+                ? leaf.position.row === desired31IvCount
+                : leaf.position.row === desired31IvCount - 1
 
-            if (node.gender && !node.genderCostIgnored && !isLastRow) {
-                if (node.gender === PokemonGender.Male) {
-                    const newCost = GENDER_GUARANTEE_COST_BY_PERCENTAGE_MALE[node.species.percentageMale]
+            if (leaf.gender && !leaf.genderCostIgnored && !isLastRow) {
+                if (leaf.gender === PokemonGender.Male) {
+                    const newCost = GENDER_GUARANTEE_COST_BY_PERCENTAGE_MALE[leaf.species.percentageMale]
                     assert(newCost !== undefined, "tried to get cost in GENDER_GUARANTEE_COST_BY_PERCENTAGE_MALE with invalid key")
                     cost += newCost
-                } else if (node.gender === PokemonGender.Female) {
-                    const newCost = GENDER_GUARANTEE_COST_BY_PERCENTAGE_MALE[100 - node.species.percentageMale]
+                } else if (leaf.gender === PokemonGender.Female) {
+                    const newCost = GENDER_GUARANTEE_COST_BY_PERCENTAGE_MALE[100 - leaf.species.percentageMale]
                     assert(newCost !== undefined, "tried to get cost in GENDER_GUARANTEE_COST_BY_PERCENTAGE_MALE with invalid key")
                     cost += newCost
                 }
             }
 
-            const heldItem = getHeldItemForLeaf(node, ctx.breedTree.map)
+            const heldItem = getHeldItemForLeaf(leaf, ctx.breedTree.map)
             if (!heldItem) {
                 continue
             }
@@ -242,8 +241,8 @@ function PokemonBreedTreeFinal() {
     }, [ctx.breedTree.map, ctx.breedTarget.nature, desired31IvCount, ctx.breedTree.setMap, setBreedErrors])
 
     return (
-        <div className="flex flex-col gap-8">
-            <div className="flex items-center gap-2 mx-auto">
+        <div className="flex flex-col gap-4">
+            <div className="flex items-center gap-2">
                 {process.env.DEBUG_BUTTONS ? (
                     <div className="space-x-4">
                         <Button variant={"secondary"} size={"sm"} onClick={() => console.log(ctx.breedTree.map)}>
@@ -265,9 +264,9 @@ function PokemonBreedTreeFinal() {
                     Current breed cost: ${currentBreedCost} / Expected cost: ${expectedCost}
                 </AlertTitle>
             </Alert>
-            <ScrollArea className="bg-popover p-4 rounded-md" style={{ border: '1px solid #1B1E22' }}>
+            <ScrollArea className="bg-popover py-4 rounded-md" style={{ border: '1px solid #1B1E22' }}>
                 <PokemonIvColors />
-                <div className="w-full flex flex-col-reverse items-center gap-8">
+                <div className="flex flex-col-reverse items-center gap-8">
                     {Array.from({
                         length: ctx.breedTarget.nature ? desired31IvCount + 1 : desired31IvCount,
                     }).map((_, row) => {

@@ -1,12 +1,11 @@
-import React from "react"
-import { PokemonBreederKind, PokemonIv, PokemonNature, PokemonSpecies, PokemonSpeciesUnparsed } from "../pokemon"
-import { PokemonBreedTreeLeaf } from "../tree/BreedTreeLeaf"
-import { UseBreedTreeMap, useBreedTreeMap } from "../tree/useBreedTreeMap"
+import pokemons from "@/data/pokemmo/monster-breeding-sim.json"
 import { assert } from "@/utils/assert"
+import React from "react"
 import { useLocalStorage } from "usehooks-ts"
-import { PokemonIvSchema, PokemonNatureSchema } from "../pokemon"
-import { PokemonBreedTreeLeafSerializedSchema } from "../tree/BreedTreeLeaf"
 import { z } from "zod"
+import { PokemonBreederKind, PokemonIv, PokemonIvSchema, PokemonNature, PokemonNatureSchema, PokemonSpecies } from "../pokemon"
+import { PokemonBreedTreeLeaf, PokemonBreedTreeLeafSerializedSchema } from "../tree/BreedTreeLeaf"
+import { UseBreedTreeMap, useBreedTreeMap } from "../tree/useBreedTreeMap"
 
 export const PokemonBreedTreeSerializedSchema = z.object({
     breedTarget: z.object({
@@ -38,7 +37,6 @@ export type BreedTarget = {
 }
 
 export interface BreedTreeContext {
-    pokemonSpeciesUnparsed: PokemonSpeciesUnparsed[]
     breedTarget: BreedTarget
     breedTree: UseBreedTreeMap
     serialize: () => PokemonBreedTreeSerialized
@@ -51,10 +49,8 @@ export interface BreedTreeContext {
 export const BreedTreeContextPrimitive = React.createContext<BreedTreeContext | null>(null)
 
 export function BreedTreeContext(props: {
-    pokemonSpeciesUnparsed: PokemonSpeciesUnparsed[]
     children: React.ReactNode
 }) {
-    const pokemonSpeciesUnparsed = React.useMemo(() => props.pokemonSpeciesUnparsed, [props.pokemonSpeciesUnparsed])
     const [localStorageTree, setLocalStorageTree] = useLocalStorage<PokemonBreedTreeSerialized | undefined>(
         "last-tree",
         undefined,
@@ -70,7 +66,6 @@ export function BreedTreeContext(props: {
             species: species,
         }),
         finalPokemonIvSet: ivs,
-        pokemonSpeciesUnparsed: props.pokemonSpeciesUnparsed,
         breedTreeMapInLocalStorage: localStorageTree?.breedTree,
         init: initMap,
         setInit: setInitMap,
@@ -91,7 +86,7 @@ export function BreedTreeContext(props: {
         const rootLeaf = serialized.breedTree["0,0"]
         assert(rootLeaf, "Deserialize failed. Root node not found.")
 
-        const speciesUnparsed = props.pokemonSpeciesUnparsed.find((p) => p.number === rootLeaf.species)
+        const speciesUnparsed = pokemons.find((p) => p.number === rootLeaf.species)
         assert(speciesUnparsed, "Failed to import Pokemon to breed target species. Invalid Pokemon number")
 
         const species = PokemonSpecies.parse(speciesUnparsed)
@@ -127,7 +122,6 @@ export function BreedTreeContext(props: {
     return (
         <BreedTreeContextPrimitive.Provider
             value={{
-                pokemonSpeciesUnparsed,
                 breedTree,
                 breedTarget: {
                     species,

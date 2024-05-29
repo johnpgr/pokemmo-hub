@@ -1,4 +1,4 @@
-
+import pokemons from "@/data/pokemmo/monster-breeding-sim.json"
 import { buttonVariants } from "@/components/ui/button"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -8,14 +8,12 @@ import { getPokemonSpriteUrl } from "@/utils/sprites"
 import { Check, ChevronsUpDown } from "lucide-react"
 import React from "react"
 import type { PokemonLeafInSelect } from "./PokemonBreedSelect"
-import { useBreedTreeContext } from "./core/ctx/PokemonBreedTreeContext"
 import { cn } from "@/utils"
 
 export function PokemonSpeciesSelect(props: {
     currentSelectedLeaf: PokemonLeafInSelect
     setCurrentSelectedLeaf: React.Dispatch<React.SetStateAction<PokemonLeafInSelect>>
 }) {
-    const ctx = useBreedTreeContext()
     const [isOpen, setIsOpen] = React.useState(false)
     const [search, setSearch] = React.useState("")
 
@@ -58,7 +56,7 @@ export function PokemonSpeciesSelect(props: {
                         <CommandEmpty>No results</CommandEmpty>
                         <CommandGroup>
                             <ScrollArea className="h-72">
-                                {ctx.pokemonSpeciesUnparsed
+                                {pokemons
                                     .filter((pokemon) => pokemon.name.toLowerCase().includes(search.toLowerCase()))
                                     .map((pokemon) => (
                                         <CommandItem

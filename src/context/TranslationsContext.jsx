@@ -12,14 +12,16 @@ import translations from '../locales';
     * @property {(key: string) => null} t
 */
 
-/** @type {TranslationContext} */
-const initial = {
-    language: 'en',
-    changeLanguage: () => null,
-    languages: [],
-    t: () => null
-}
-const TranslationContext = createContext(initial)
+/**
+* @type {React.Context<TranslationContext>}
+*/
+const TranslationContext = createContext(
+    {
+        language: 'en',
+        changeLanguage: () => null,
+        languages: [],
+        t: () => null
+    })
 
 export function useTranslations() {
     return useContext(TranslationContext)

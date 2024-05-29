@@ -3,7 +3,6 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { AccountProvider } from './AccountContext'
 import { AuthProvider } from './AuthContext'
 import { BerriesProvider } from './BerryContext'
-import { BreedingProvider } from './BreedingContext'
 import { DarkModeProvider } from './DarkModeContext'
 import { MarketProvider } from './MarketContext'
 import { NavigationMenuProvider } from './NavigationMenuContext'
@@ -24,15 +23,13 @@ export const Providers = ({ children }) => {
                             <SettingsProvider>
                                 <DarkModeProvider>
                                     <NavigationMenuProvider>
-                                        <BreedingProvider>
-                                            <PokedexProvider>
-                                                <BerriesProvider>
-                                                    <MarketProvider>
-                                                        {children}
-                                                    </MarketProvider>
-                                                </BerriesProvider>
-                                            </PokedexProvider>
-                                        </BreedingProvider>
+                                        <PokedexProvider>
+                                            <BerriesProvider>
+                                                <MarketProvider>
+                                                    {children}
+                                                </MarketProvider>
+                                            </BerriesProvider>
+                                        </PokedexProvider>
                                     </NavigationMenuProvider>
                                 </DarkModeProvider>
                             </SettingsProvider>

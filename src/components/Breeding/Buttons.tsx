@@ -1,4 +1,3 @@
-
 import { PokemonBreedTreeSerializedSchema, useBreedTreeContext } from "./core/ctx/PokemonBreedTreeContext"
 import { Try } from "@/utils/results"
 import { TooltipProvider } from "@radix-ui/react-tooltip"
@@ -46,7 +45,7 @@ export function JsonImportButton(props: { handleImportJson: (data: string) => vo
                 <pre spellCheck={false}>
                     <code>
                         <Textarea
-                            className="w-full resize-none border-dark"
+                            className="w-full rounded-none resize-none border-dark"
                             rows={16}
                             value={jsonData}
                             onChange={(e) => setJsonData(e.currentTarget?.value ?? "")}

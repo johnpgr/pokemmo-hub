@@ -2,9 +2,10 @@ import { assert } from "@/utils/assert"
 import React from "react"
 import { POKEMON_BREEDTREE_LASTROW_MAPPING } from "../consts"
 import type { IVSet } from "../ctx/PokemonBreedTreeContext"
-import { PokemonBreederKind, PokemonSpecies, PokemonSpeciesUnparsed } from "../pokemon"
+import { PokemonBreederKind, PokemonSpecies } from "../pokemon"
 import { PokemonBreedTreeLeaf, PokemonBreedTreeLeafSerialized } from "./BreedTreeLeaf"
 import { PokemonBreedTreePosition } from "./BreedTreePosition"
+import pokemons from "@/data/pokemmo/monster-breeding-sim.json"
 
 export type PokemonBreedTreePositionKey = string
 export type PokemonBreedTreeMap = Record<PokemonBreedTreePositionKey, PokemonBreedTreeLeaf>
@@ -13,7 +14,6 @@ export type PokemonBreedTreeMapSerialized = Record<PokemonBreedTreePositionKey, 
 export function useBreedTreeMap(props: {
     finalPokemonLeaf: PokemonBreedTreeLeaf
     finalPokemonIvSet: IVSet
-    pokemonSpeciesUnparsed: PokemonSpeciesUnparsed[]
     breedTreeMapInLocalStorage: PokemonBreedTreeMapSerialized | undefined
     init: boolean
     setInit: React.Dispatch<React.SetStateAction<boolean>>
@@ -114,7 +114,7 @@ export function useBreedTreeMap(props: {
             const leaf = breedTreeMapCopy[pos]
             assert(leaf, `Failed to import breed tree. Exported tree contains invalid position. (${pos})`)
 
-            const unparsedSpecies = props.pokemonSpeciesUnparsed.find((p) => p.number === value.species)
+            const unparsedSpecies = pokemons.find((p) => p.number === value.species)
             if (unparsedSpecies) {
                 const species = PokemonSpecies.parse(unparsedSpecies)
                 leaf.setSpecies(species)

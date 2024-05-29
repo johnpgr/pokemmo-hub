@@ -74,9 +74,9 @@ export type IvColor = (typeof IV_COLOR_DICT)[keyof typeof IV_COLOR_DICT]
 export const LEAF_SCALE_BY_COLOR_AMOUNT: Record<number, string> = {
     5: '100%',
     4: '90%',
-    3: '80%',
-    2: '75%',
-    1: '66%',
+    3: '75%',
+    2: '66.6%',
+    1: '50%',
 }
 
 export const SPRITE_SCALE_BY_COLOR_AMOUNT: Record<number, string> = {
