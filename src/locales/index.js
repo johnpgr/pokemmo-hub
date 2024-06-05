@@ -32,53 +32,50 @@ import locations_it from './it-IT/locations.json'
 import locations_jp from './ja-JP/locations.json'
 import locations_br from './pt-BR/locations.json'
 
-
-
 export default {
-    'en': {
+    en: {
         ...monster_en,
         ...locations_en,
         ...en,
     },
-    'cn': {
+    cn: {
         ...monster_cn,
         ...locations_cn,
         ...cn,
     },
-    'tw': {
+    tw: {
         ...monster_tw,
         ...locations_tw,
         ...tw,
     },
-    'es': {
+    es: {
         ...monster_es,
         ...locations_es,
         ...es,
     },
-    'fr': {
+    fr: {
         ...monster_fr,
         ...locations_fr,
         ...fr,
     },
-    'de': {
+    de: {
         ...monster_de,
         ...locations_de,
         ...de,
     },
-    'it': {
+    it: {
         ...monster_it,
         ...locations_it,
         ...it,
     },
-    'jp': {
+    jp: {
         ...monster_jp,
         ...locations_jp,
         ...jp,
     },
-    'br': {
+    br: {
         ...monster_br,
         ...locations_br,
         ...br,
-    }
+    },
 }
-

@@ -14,6 +14,7 @@ import { PokemonSpeciesSelect } from "./PokemonSpeciesSelect"
 import { BREED_EXPECTED_COSTS, DEFAULT_IV_DROPDOWN_VALUES, POKEMON_BREEDER_KIND_COUNT_BY_GENERATIONS } from "./consts"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { JsonImportButton } from "./Buttons"
+import { useTranslations } from "@/context/TranslationsContext"
 
 /**
  * This type is used to represent the state of the full Pokemon node that is going to be used in the PokemonBreedTreeContext
@@ -26,6 +27,7 @@ export type PokemonLeafInSelect = {
 }
 
 export function PokemonBreedSelect() {
+    const { t } = useTranslations()
     const { toast } = useToast()
     const ctx = useBreedTreeContext()
     const [desired31IVCount, setDesired31IVCount] = React.useState(2)
@@ -57,8 +59,8 @@ export function PokemonBreedSelect() {
 
         if (!currentPokemonInSelect.species) {
             toast({
-                title: "No Pokemon was selected",
-                description: "You must select a Pokemon to breed.",
+                title: t("No Pokemon was selected"),
+                description: t("You must select a Pokemon to breed."),
                 variant: "destructive",
             })
             return
@@ -66,8 +68,8 @@ export function PokemonBreedSelect() {
 
         if (!validateIvFieldsUniqueness()) {
             toast({
-                title: "Invalid IVs",
-                description: "You can't have the same stats in multiple IVs field.",
+                title: t("Invalid IVs"),
+                description: t("You can't have the same stats in multiple IVs field."),
                 variant: "destructive",
             })
             return
@@ -96,7 +98,7 @@ export function PokemonBreedSelect() {
 
         if (!dataUnparsed.ok) {
             toast({
-                title: "Failed to import the breed tree JSON content.",
+                title: t("Failed to import the breed tree JSON content."),
                 description: (dataUnparsed.error as Error).message,
                 variant: "destructive",
             })
@@ -109,7 +111,7 @@ export function PokemonBreedSelect() {
             const errorMsg = generateErrorMessage(res.error.issues)
 
             toast({
-                title: "Failed to import the breed tree JSON content.",
+                title: t("Failed to import the breed tree JSON content."),
                 description: errorMsg,
                 variant: "destructive",
             })
@@ -154,19 +156,19 @@ export function PokemonBreedSelect() {
             </div>
             <Alert className="w-full space-y-4 mt-4">
                 <AlertTitle className="text-base">
-                    For this Pokémon breed you will spend <b> ≈ ${expectedCost} </b> and you may need <b>{totalBreedPokemonCount}</b>{" "}
+                    {t("For this Pokémon breed you will spend")} <b> ≈ ${expectedCost} </b> {t("and you may need")} <b>{totalBreedPokemonCount}</b>{" "}
                     Pokémon.
                     <br />
-                    Price calculations are based only on the breeding items cost, gender choice and everstone. Keep in consideration that some Pokémon has a higher cost for gender choices.
+                    {t("Price calculations are based only on the breeding items cost, gender choice and everstone. Keep in consideration that some Pokémon has a higher cost for gender choices.")}
                 </AlertTitle>
                 <AlertDescription className="flex items-center justify-center gap-2">
                     <Button className="gap-2" type="submit">
                         <PlayIcon size={16} />
-                        Start Breeding
+                        {t("Start Breeding")}
                     </Button>
                     <Button className="gap-2" type="reset" variant={"destructive"} onClick={handleResetFields}>
                         <RotateCcw size={16} />
-                        Reset
+                        {t("Reset")}
                     </Button>
                 </AlertDescription>
             </Alert>

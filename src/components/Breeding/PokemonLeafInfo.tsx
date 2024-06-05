@@ -9,6 +9,7 @@ import { PokemonLeafGender } from "./PokemonLeafGender"
 import { HeldItem, PokemonLeafHeldItem, getHeldItemForLeaf } from "./PokemonLeafHeldItem"
 import { PokemonLeafNickname } from "./PokemonLeafNickname"
 import { Button } from "@/components/ui/button"
+import { useTranslations } from '@/context/TranslationsContext'
 
 export function PokemonLeafInfo(props: {
     desired31IvCount: number
@@ -16,6 +17,7 @@ export function PokemonLeafInfo(props: {
     breedTree: PokemonBreedTreeMap
     updateBreedTree: () => void
 }) {
+    const { t } = useTranslations()
     const ctx = useBreedTreeContext()
     const heldItem = getHeldItemForLeaf(props.currentLeaf, props.breedTree)
 
@@ -32,7 +34,6 @@ export function PokemonLeafInfo(props: {
                 <CardTitle className="flex items-center">
                     {props.currentLeaf && props.currentLeaf.species ? (
                         <div className="flex items-center">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src={getPokemonSpriteUrl(props.currentLeaf.species.name)}
                                 style={{
@@ -57,10 +58,7 @@ export function PokemonLeafInfo(props: {
                             updateBreedTree={props.updateBreedTree}
                         />
                         <PokemonLeafHeldItem
-                            item={
-                                //if not natured, ivs must exist.
-                                props.currentLeaf.nature ? HeldItem.Nature : heldItem!
-                            }
+                            item={props.currentLeaf.nature ? HeldItem.Nature : heldItem!}
                         />
                     </div>
                 ) : null}
@@ -71,31 +69,31 @@ export function PokemonLeafInfo(props: {
                         <p className="font-bold -mb-1">Ivs</p>
                         {props.currentLeaf.ivs.map((iv) => (
                             <span className="text-sm" key={Strings.random(4)}>
-                                31 {Strings.pascalToSpacedPascal(iv)}
+                                31 {Strings.pascalToSpacedPascal(t(iv))}
                             </span>
                         ))}
                     </>
                 ) : null}
                 {props.currentLeaf.nature ? (
                     <>
-                        <p className="font-bold -mb-1">Nature</p>
-                        <span className="text-sm">{props.currentLeaf.nature}</span>
+                        <p className="font-bold -mb-1">{t("Nature")}</p>
+                        <span className="text-sm">{t(props.currentLeaf.nature)}</span>
                     </>
                 ) : null}
                 {props.currentLeaf.species ? (
                     <>
-                        <p className="font-bold -mb-1">Egg Groups</p>
+                        <p className="font-bold -mb-1">{t("Egg Groups")}</p>
                         <p>
                             <span className="text-sm">
-                                {props.currentLeaf.species!.eggGroups[0]}
+                                {t(props.currentLeaf.species!.eggGroups[0])}
                                 {props.currentLeaf.species?.eggGroups[1]
-                                    ? `, ${props.currentLeaf.species.eggGroups[1]}`
+                                    ? `, ${t(props.currentLeaf.species.eggGroups[1])}`
                                     : null}
                             </span>
                         </p>
                         {!props.currentLeaf.isRootLeaf() ? (
                             <Button onClick={resetLeaf} className="mt-2" variant={"destructive"} size={"sm"}>
-                                Reset
+                                {t("Reset")}
                             </Button>
                         ) : null}
                     </>

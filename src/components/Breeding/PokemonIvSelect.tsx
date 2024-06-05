@@ -6,6 +6,7 @@ import React from "react"
 import type { PokemonLeafInSelect } from "./PokemonBreedSelect"
 import { PokemonIvRadioGroup, PokemonIvRadioItem } from "./PokemonIvRadio"
 import { IV_DROPDOWN_LIST_VALUES } from "./consts"
+import { useTranslations } from "@/context/TranslationsContext"
 
 export function PokemonIvSelect(props: {
     desired31IVCount: number
@@ -16,6 +17,8 @@ export function PokemonIvSelect(props: {
     currentPokemonInSelect: PokemonLeafInSelect
     setCurrentPokemonInSelect: React.Dispatch<React.SetStateAction<PokemonLeafInSelect>>
 }) {
+    const { t } = useTranslations()
+
     function handleDesired31IvCountChange(number: string) {
         const value = parseInt(number)
         const ivSet = new Set(props.currentIVDropdownValues.slice(0, value))
@@ -38,7 +41,7 @@ export function PokemonIvSelect(props: {
 
     return (
         <div>
-            <p className="text-foreground/70 text-sm m-0 pb-2">How many IV&apos;s do you want?</p>
+            <p className="text-foreground/70 text-sm m-0 pb-2">{t("How many IV's do you want?")}</p>
             <PokemonIvRadioGroup
                 className="border border-dark rounded-md bg-popover w-fit flex"
                 defaultValue={"2"}
@@ -61,7 +64,7 @@ export function PokemonIvSelect(props: {
                 {Object.entries(props.breederKindCountTable).map(([_, value], i) => (
                     <div key={`PokemonIvSelect:${i}`} className="w-full">
                         <Label className="text-sm pb-1 text-foreground/70">
-                            <strong className="text-lg text-foreground mr-1">{value}</strong> 1x31 IV in
+                            <strong className="text-lg text-foreground mr-1">{value}</strong> {t("1x31 IV in")}
                         </Label>
                         <Select
                             value={props.currentIVDropdownValues[i]!}
@@ -69,13 +72,13 @@ export function PokemonIvSelect(props: {
                         >
                             <SelectTrigger className="bg-popover hover:bg-popover/90 border-dark">
                                 <SelectValue aria-label={props.currentIVDropdownValues[i]}>
-                                    {Strings.pascalToSpacedPascal(props.currentIVDropdownValues[i]!)}
+                                    {Strings.pascalToSpacedPascal(t(props.currentIVDropdownValues[i]!))}
                                 </SelectValue>
                             </SelectTrigger>
                             <SelectContent className="border-dark">
                                 {IV_DROPDOWN_LIST_VALUES.map((iv) => (
                                     <SelectItem key={`PokemonIvSelect:${i}:${iv}`} value={iv}>
-                                        {Strings.pascalToSpacedPascal(iv)}
+                                        {Strings.pascalToSpacedPascal(t(iv))}
                                     </SelectItem>
                                 ))}
                             </SelectContent>

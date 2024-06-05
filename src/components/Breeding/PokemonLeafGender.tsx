@@ -13,6 +13,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { useBreedTreeContext } from "./core/ctx/PokemonBreedTreeContext"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/utils"
+import { useTranslations } from '@/context/TranslationsContext'
 
 export function PokemonLeafGender(props: {
     desired31IvCount: number
@@ -21,6 +22,7 @@ export function PokemonLeafGender(props: {
     updateBreedTree: () => void
 }) {
     const ctx = useBreedTreeContext()
+    const { t } = useTranslations()
     const gender = props.currentLeaf.gender
     const percentageMale = props.currentLeaf.species?.percentageMale
     const isLastRow = ctx.breedTarget.nature
@@ -54,7 +56,7 @@ export function PokemonLeafGender(props: {
             <PopoverContent className="max-w-xs w-full shadow border border-dark">
                 <div className="flex flex-col items-center gap-6">
                     {props.currentLeaf.isGenderless() || props.currentLeaf.isDitto() ? (
-                        <i className="text-sm text-foreground/70">This Pokemon species can&apos;t have a gender</i>
+                        <i className="text-sm text-foreground/70">{t("This Pokemon species can't have a gender")}</i>
                     ) : (
                         <>
                             <ToggleGroup
@@ -112,7 +114,7 @@ export function PokemonLeafGender(props: {
                                                 onCheckedChange={handleToggleGenderCostIgnored}
                                             />
                                             <Label htmlFor="ignore-g" className="text-foreground/70">
-                                                Ignore cost
+                                                {t("Ignore cost")}
                                             </Label>
                                         </div>
                                     ) : null}

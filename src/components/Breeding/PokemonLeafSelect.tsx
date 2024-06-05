@@ -19,6 +19,7 @@ import type { PokemonBreedTreePosition } from "./core/tree/BreedTreePosition"
 import type { PokemonBreedTreeMap } from "./core/tree/useBreedTreeMap"
 import evolutions from "@/data/evolutions.json"
 import pokemons from "@/data/pokemmo/monster-breeding-sim.json"
+import { useTranslations } from "@/context/TranslationsContext"
 
 enum SearchMode {
     All,
@@ -32,6 +33,7 @@ export function PokemonLeafSelect(props: {
     updateBreedTree: () => void
 }) {
     const id = React.useId()
+    const { t, language } = useTranslations()
     const ctx = useBreedTreeContext()
     const [pending, startTransition] = React.useTransition()
     const isDesktop = useMediaQuery("(min-width: 768px)")
@@ -163,7 +165,7 @@ export function PokemonLeafSelect(props: {
                     {!isPokemonToBreed ? (
                         <Command className="w-full max-w-lg border border-dark shadow">
                             <CommandInput
-                                placeholder="Search pokemon..."
+                                placeholder={t("Search pokemon...")}
                                 value={search}
                                 onValueChange={setSearch}
                                 data-cy="search-pokemon-input"
@@ -174,9 +176,9 @@ export function PokemonLeafSelect(props: {
                                     checked={searchMode === SearchMode.EggGroupMatches}
                                     onCheckedChange={handleSearchModeChange}
                                 />
-                                Show only {ctx.breedTarget.species?.name}&apos;s egg groups
+                                {t("Show only")} {t(ctx.breedTarget.species!.name)}{language === "en" ? "'s" : ""} {t("Egg Groups")}
                             </div>
-                            <CommandEmpty>{!pending ? "No results" : ""}</CommandEmpty>
+                            <CommandEmpty>{!pending ? t("No results") : ""}</CommandEmpty>
                             <CommandGroup>
                                 <ScrollArea className="h-72 w-full">
                                     {pending
@@ -189,7 +191,7 @@ export function PokemonLeafSelect(props: {
                                         ))
                                         : pokemonList
                                             .filter((pokemon) =>
-                                                pokemon.name.toLowerCase().includes(search.toLowerCase()),
+                                                t(pokemon.name).toLowerCase().includes(search.toLowerCase()),
                                             )
                                             .map((pokemon) => (
                                                 <CommandItem
@@ -203,7 +205,7 @@ export function PokemonLeafSelect(props: {
                                                         <Check className="h-4 w-4 absolute top-1/2 -translate-y-1/2 left-2" />
                                                     ) : null}
                                                     <span className="pl-6">
-                                                        {pokemon.name}
+                                                        {t(pokemon.name)}
                                                     </span>
                                                 </CommandItem>
                                             ))}
@@ -249,7 +251,7 @@ export function PokemonLeafSelect(props: {
                 {!isPokemonToBreed ? (
                     <Command className="w-full border">
                         <CommandInput
-                            placeholder="Search pokemon..."
+                            placeholder={t("Search pokemon...")}
                             value={search}
                             onValueChange={setSearch}
                             data-cy="search-pokemon-input"
@@ -260,7 +262,7 @@ export function PokemonLeafSelect(props: {
                                 checked={searchMode === SearchMode.EggGroupMatches}
                                 onCheckedChange={handleSearchModeChange}
                             />
-                            Show only {ctx.breedTarget.species?.name}&apos;s egg groups
+                            {t("Show only")} {t(ctx.breedTarget.species!.name)}{language === "en" ? "'s" : ""} {t("Egg Groups")}
                         </div>
                         <CommandEmpty>{!pending ? "No results" : ""}</CommandEmpty>
                         <CommandGroup>
@@ -275,7 +277,7 @@ export function PokemonLeafSelect(props: {
                                     ))
                                     : pokemonList
                                         .filter((pokemon) =>
-                                            pokemon.name.toLowerCase().includes(search.toLowerCase()),
+                                            t(pokemon.name).toLowerCase().includes(search.toLowerCase()),
                                         )
                                         .map((pokemon) => (
                                             <CommandItem
@@ -289,7 +291,7 @@ export function PokemonLeafSelect(props: {
                                                     <Check className="h-4 w-4 absolute top-1/2 -translate-y-1/2 left-2" />
                                                 ) : null}
                                                 <span className="pl-6">
-                                                    {pokemon.name}
+                                                    {t(pokemon.name)}
                                                 </span>
                                             </CommandItem>
                                         ))}

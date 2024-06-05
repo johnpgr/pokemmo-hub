@@ -30,16 +30,17 @@ import { Textarea } from "@/components/ui/textarea"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { useToast } from "@/components/ui/use-toast"
 import { cn } from "@/utils"
+import { useTranslations } from "@/context/TranslationsContext"
 
 export function JsonImportButton(props: { handleImportJson: (data: string) => void }) {
+    const { t } = useTranslations()
     const [jsonData, setJsonData] = React.useState("")
 
     return (
         <Popover>
             <PopoverTrigger className={cn(buttonVariants({ variant: "secondary" }), "gap-2")} type="button">
                 <Import size={16} />
-                {/* TODO: i18n */}
-                Import
+                {t('Import')}
             </PopoverTrigger>
             <PopoverContent className="flex flex-col gap-4 w-96">
                 <pre spellCheck={false}>
@@ -54,8 +55,7 @@ export function JsonImportButton(props: { handleImportJson: (data: string) => vo
                 </pre>
                 <Button className="gap-1" onClick={() => props.handleImportJson(jsonData)}>
                     <Save size={16} />
-                    {/* TODO: i18n */}
-                    Save
+                    {t('Save')}
                 </Button>
             </PopoverContent>
         </Popover>
@@ -63,6 +63,7 @@ export function JsonImportButton(props: { handleImportJson: (data: string) => vo
 }
 
 export function ImportExportButton(props: { handleExport: () => string }) {
+    const { t } = useTranslations()
     const { toast } = useToast()
     const ctx = useBreedTreeContext()
     const [jsonData, setJsonData] = React.useState("")
@@ -75,8 +76,7 @@ export function ImportExportButton(props: { handleExport: () => string }) {
             const errorMsg = generateZodErrorMessage(res.error.issues)
 
             toast({
-                // TODO: i18n
-                title: "Failed to save the breed tree JSON content.",
+                title: t("Failed to save the breed tree JSON content."),
                 description: errorMsg,
                 variant: "destructive",
             })
@@ -86,8 +86,7 @@ export function ImportExportButton(props: { handleExport: () => string }) {
         const deserialized = Try(() => ctx.deserialize(res.data))
         if (!deserialized.ok) {
             toast({
-                // TODO: i18n
-                title: "Failed to save the breed tree JSON content.",
+                title: t("Failed to save the breed tree JSON content."),
                 description: (deserialized.error as Error).message ?? "",
                 variant: "destructive",
             })
@@ -101,8 +100,7 @@ export function ImportExportButton(props: { handleExport: () => string }) {
                 type="button"
                 onClick={() => setJsonData(props.handleExport())}>
                 <Import size={16} />
-                {/* TODO: i18n */}
-                Import/Export
+                {t("Import/Export")}
             </PopoverTrigger>
             <PopoverContent className="relative flex flex-col gap-4 w-96">
                 <pre spellCheck={false}>
@@ -124,31 +122,26 @@ export function ImportExportButton(props: { handleExport: () => string }) {
                                     .writeText(jsonData)
                                     .then(() => {
                                         toast({
-                                            // TODO: i18n
-                                            title: "Copy success.",
-                                            // TODO: i18n
-                                            description: "The current breed state was copied to your clipboard.",
+                                            title: t("Copy success."),
+                                            description: t("The current breed state was copied to your clipboard."),
                                         })
                                     })
                                     .catch(() => {
                                         toast({
-                                            // TODO: i18n
-                                            title: "Copy failed.",
-                                            // TODO: i18n
-                                            description: "Failed to copy breed contents.",
+                                            title: t("Copy failed."),
+                                            description: t("Failed to copy breed contents."),
                                         })
                                     })
                             }}
                         >
                             <ClipboardCopy size={16} />
                         </TooltipTrigger>
-                        {/* TODO: i18n */}
-                        <TooltipContent>Copy to clipboard</TooltipContent>
+                        <TooltipContent>{t("Copy to clipboard")}</TooltipContent>
                     </Tooltip>
                 </TooltipProvider>
                 <Button onClick={handleSave} className="gap-1">
                     <Save size={16} />
-                    Save
+                    {t("Save")}
                 </Button>
             </PopoverContent>
         </Popover >
@@ -156,6 +149,7 @@ export function ImportExportButton(props: { handleExport: () => string }) {
 }
 
 export function ResetBreedButton(props: { handleRestartBreed: () => void }) {
+    const { t } = useTranslations()
     const isDesktop = useMediaQuery("(min-width: 768px)")
 
     if (isDesktop) {
@@ -165,24 +159,21 @@ export function ResetBreedButton(props: { handleRestartBreed: () => void }) {
                     className={cn(buttonVariants({ variant: "destructive" }), "gap-1")}
                 >
                     <RotateCcw size={16} />
-                    Reset
+                    {t("Reset")}
                 </DialogTrigger>
                 <DialogContent
                     className="sm:max-w-[425px] border-dark">
                     <DialogHeader>
-                        {/* TODO: i18n */}
-                        <DialogTitle>Reset current breed</DialogTitle>
+                        <DialogTitle>{t("Reset current breed")}</DialogTitle>
                         <DialogDescription className="text-foreground/90">
-                            {/* TODO: i18n */}
-                            Are you sure you want to reset the current breed?
+                            {t("Are you sure you want to reset the current breed?")}
                             <br />
-                            All progress will be lost.
+                            {t("All progress will be lost.")}
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
                         <Button variant={"destructive"} onClick={props.handleRestartBreed}>
-                            {/* TODO: i18n */}
-                            Confirm
+                            {t("Confirm")}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -196,21 +187,16 @@ export function ResetBreedButton(props: { handleRestartBreed: () => void }) {
                 className={cn(buttonVariants({ variant: "destructive" }), "gap-1")}
             >
                 <RotateCcw size={16} />
-                Reset
+                {t("Reset")}
             </DrawerTrigger>
             <DrawerContent>
                 <DrawerHeader className="text-left">
-                    {/* TODO: i18n */}
-                    <DrawerTitle>Reset current breed</DrawerTitle>
-                    <DrawerDescription>
-                        {/* TODO: i18n */}
-                        Are you sure you want to reset the current breed? All progress will be lost.
-                    </DrawerDescription>
+                    <DrawerTitle>{t("Reset current breed")}</DrawerTitle>
+                    <DrawerDescription>{t("Are you sure you want to reset the current breed? All progress will be lost.")}</DrawerDescription>
                 </DrawerHeader>
                 <DrawerFooter className="pt-2">
-                    {/* TODO: i18n */}
                     <DrawerClose>
-                        Confirm
+                        {t("Confirm")}
                     </DrawerClose>
                 </DrawerFooter>
             </DrawerContent>

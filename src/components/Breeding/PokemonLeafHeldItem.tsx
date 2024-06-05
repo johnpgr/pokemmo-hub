@@ -6,8 +6,10 @@ import { getEvItemSpriteUrl } from "@/utils/sprites"
 import { PokemonIv } from "./core/pokemon"
 import { PokemonBreedTreeLeaf } from "./core/tree/BreedTreeLeaf"
 import { PokemonBreedTreeMap } from "./core/tree/useBreedTreeMap"
+import { useTranslations } from '@/context/TranslationsContext'
 
 export function PokemonLeafHeldItem(props: { item: HeldItem }) {
+    const { t } = useTranslations()
     return (
         <TooltipProvider delayDuration={250}>
             <Tooltip>
@@ -21,7 +23,7 @@ export function PokemonLeafHeldItem(props: { item: HeldItem }) {
                     />
                 </TooltipTrigger>
                 <TooltipContent className='border-dark shadow'>
-                    <p className='m-0'>{Strings.kebabToSpacedPascal(props.item)}</p>
+                    <p className='m-0'>{Strings.kebabToSpacedPascal(t(props.item))}</p>
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>
@@ -38,14 +40,14 @@ export enum HeldItem {
     Nature = "everstone",
 }
 
-export function getHeldItemForLeaf(node: PokemonBreedTreeLeaf, breedTree: PokemonBreedTreeMap): HeldItem | null {
-    const breedPartner = node.getPartnerLeaf(breedTree)
+export function getHeldItemForLeaf(leaf: PokemonBreedTreeLeaf, breedTree: PokemonBreedTreeMap): HeldItem | null {
+    const breedPartner = leaf.getPartnerLeaf(breedTree)
 
     if (!breedPartner) {
         return null
     }
 
-    const ivThatDoesntExistOnBreedPartner = node.ivs?.filter((iv) => !breedPartner.ivs?.includes(iv)) ?? []
+    const ivThatDoesntExistOnBreedPartner = leaf.ivs?.filter((iv) => !breedPartner.ivs?.includes(iv)) ?? []
     if (ivThatDoesntExistOnBreedPartner.length === 0) {
         return null
     }

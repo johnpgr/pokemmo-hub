@@ -9,11 +9,13 @@ import { Check, ChevronsUpDown } from "lucide-react"
 import React from "react"
 import type { PokemonLeafInSelect } from "./PokemonBreedSelect"
 import { cn } from "@/utils"
+import { useTranslations } from "@/context/TranslationsContext"
 
 export function PokemonSpeciesSelect(props: {
     currentSelectedLeaf: PokemonLeafInSelect
     setCurrentSelectedLeaf: React.Dispatch<React.SetStateAction<PokemonLeafInSelect>>
 }) {
+    const { t } = useTranslations()
     const [isOpen, setIsOpen] = React.useState(false)
     const [search, setSearch] = React.useState("")
 
@@ -34,9 +36,7 @@ export function PokemonSpeciesSelect(props: {
                         <img
                             className="top-[1px] left-0"
                             src={getPokemonSpriteUrl(props.currentSelectedLeaf.species?.name)}
-                            style={{
-                                imageRendering: "pixelated",
-                            }}
+                            style={{ imageRendering: "pixelated" }}
                             alt={props.currentSelectedLeaf.species.name}
                         />
                     ) : null}
@@ -48,7 +48,7 @@ export function PokemonSpeciesSelect(props: {
                 <PopoverContent className="p-0 border border-dark">
                     <Command>
                         <CommandInput
-                            placeholder="Search pokemon..."
+                            placeholder={t("Search pokemon...")}
                             value={search}
                             onValueChange={setSearch}
                             data-cy="search-pokemon-input"
@@ -57,7 +57,7 @@ export function PokemonSpeciesSelect(props: {
                         <CommandGroup>
                             <ScrollArea className="h-72">
                                 {pokemons
-                                    .filter((pokemon) => pokemon.name.toLowerCase().includes(search.toLowerCase()))
+                                    .filter((pokemon) => t(pokemon.name).toLowerCase().includes(search.toLowerCase()))
                                     .map((pokemon) => (
                                         <CommandItem
                                             key={`pokemon_to_breed:${pokemon.name}`}
@@ -70,7 +70,7 @@ export function PokemonSpeciesSelect(props: {
                                                 <Check className="h-4 w-4 absolute top-1/2 -translate-y-1/2 left-2" />
                                             ) : null}
                                             <span className="pl-6">
-                                                {pokemon.name}
+                                                {t(pokemon.name)}
                                             </span>
                                         </CommandItem>
                                     ))}

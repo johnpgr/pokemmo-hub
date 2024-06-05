@@ -17,6 +17,9 @@ import { Alert, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { ImportExportButton, ResetBreedButton } from "./Buttons"
+import { useTranslations } from "@/context/TranslationsContext"
+
+export type BreedErrors = Record<PokemonBreedTreePositionKey, Set<PokemonBreed.BreedError> | undefined>
 
 export function PokemonBreedTree() {
     const loadedFromLocal = React.useRef(false)
@@ -38,11 +41,10 @@ export function PokemonBreedTree() {
     return <PokemonBreedTreeFinal />
 }
 
-export type BreedErrors = Record<PokemonBreedTreePositionKey, Set<PokemonBreed.BreedError> | undefined>
-
 function PokemonBreedTreeFinal() {
     const updateFromBreedEffect = React.useRef(false)
     const ctx = useBreedTreeContext()
+    const { t } = useTranslations()
     assert(ctx.breedTarget.species, "PokemonSpecies must be defined in useBreedMap")
 
     const desired31IvCount = Object.values(ctx.breedTarget.ivs).filter(Boolean).length
@@ -148,10 +150,10 @@ function PokemonBreedTreeFinal() {
                 errorMsg = errorMsg.slice(0, -2)
             }
 
-            toast.error(`${node.species.name} cannot breed with ${partner.species.name}.`, {
-                description: `Error codes: ${errorMsg}`,
+            toast.error(`${t(node.species.name)} ${t("cannot breed with")} ${t(partner.species.name)}.`, {
+                description: `${t("Error codes")}: ${errorMsg}`,
                 action: {
-                    label: "Dismiss",
+                    label: t("Dismiss"),
                     onClick: () => { },
                 },
             })
@@ -243,7 +245,7 @@ function PokemonBreedTreeFinal() {
     return (
         <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
-                {process.env.DEBUG_BUTTONS ? (
+                {process.env.BREEDING_DEBUG_BUTTONS ? (
                     <div className="space-x-4">
                         <Button variant={"secondary"} size={"sm"} onClick={() => console.log(ctx.breedTree.map)}>
                             Debug (Breed Tree)
@@ -261,7 +263,7 @@ function PokemonBreedTreeFinal() {
             </div>
             <Alert style={{ border: "1px solid #1B1E22" }}>
                 <AlertTitle className="flex items-center gap-2">
-                    Current breed cost: ${currentBreedCost} / Expected cost: ${expectedCost}
+                    ${t("Current breed cost")}: ${currentBreedCost} / ${t("Expected cost")}: ${expectedCost}
                 </AlertTitle>
             </Alert>
             <ScrollArea className="bg-popover py-4 rounded-md" style={{ border: '1px solid #1B1E22' }}>

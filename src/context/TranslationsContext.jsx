@@ -9,7 +9,7 @@ import translations from '../locales';
     * @property {string} language
     * @property {React.Dispatch<React.SetStateAction<string>>} changeLanguage
     * @property {string[]} languages,
-    * @property {(key: string) => null} t
+    * @property {(key: string) => string} t
 */
 
 /**
