@@ -20,6 +20,7 @@
     "how many ivs do you want?": "Combien d'IV voulez-vous ?",
     "consider nature in breeding project?": "Tenir compte de la nature dans le processus de reproduction ?",
     "1x31 iv in...": "1x31 IV en...",
+    "startbreedingtip": "Start by clicking one of the tree's leafs 'circles' to start adding the Pokémons for this breed simulation.",
     "breedingexplanation": "Pour ce Pokémon vous dépenserez $0$ et vous aurez peut-être besoin de $1 Pokémon.",
     "breedingexplanation2": "Les calculs de prix sont basés uniquement sur le coût des objets de reproduction, le choix du sexe et la pierre stase. Gardez à l'esprit que certains Pokémon ont un coût plus élevé pour le choix du sexe.",
     "you can't have the same stats in multiple ivs field.": "Vous ne pouvez pas avoir les mêmes statistiques dans plusieurs champs d'IV.",

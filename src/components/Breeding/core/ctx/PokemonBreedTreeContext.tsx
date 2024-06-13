@@ -44,6 +44,12 @@ export interface BreedTreeContext {
     saveToLocalStorage: () => void
     loadFromLocalStorage: () => void
     resetLocalStorage: () => void
+    userHasUsedLeafGenderButton: boolean
+    setUserHasUsedLeafGenderButton: React.Dispatch<React.SetStateAction<boolean>>
+    userHasSelectedLeafGender: boolean
+    setUserHasSelectedLeafGender: React.Dispatch<React.SetStateAction<boolean>>
+    userHasUsedLeafButton: boolean
+    setUserHasUsedLeafButton: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const BreedTreeContextPrimitive = React.createContext<BreedTreeContext | null>(null)
@@ -55,6 +61,9 @@ export function BreedTreeContext(props: {
         "last-tree",
         undefined,
     )
+    const [userHasUsedLeafGenderButton, setUserHasUsedLeafGenderButton] = useLocalStorage("user-has-used-leaf-gender-button", false)
+    const [userHasSelectedLeafGender, setUserHasSelectedLeafGender] = useLocalStorage("user-has-selected-leaf-gender", false)
+    const [userHasUsedLeafButton, setUserHasUsedLeafButton] = useLocalStorage('user-has-used-leaf-button', false)
     const [species, setSpecies] = React.useState<PokemonSpecies>()
     const [nature, setNature] = React.useState<PokemonNature>()
     const [ivs, setIvs] = React.useState<IVSet>(IVSet.DEFAULT)
@@ -136,6 +145,12 @@ export function BreedTreeContext(props: {
                 saveToLocalStorage,
                 loadFromLocalStorage,
                 resetLocalStorage,
+                userHasUsedLeafGenderButton,
+                setUserHasUsedLeafGenderButton,
+                userHasSelectedLeafGender,
+                setUserHasSelectedLeafGender,
+                userHasUsedLeafButton,
+                setUserHasUsedLeafButton,
             }}
         >
             {props.children}

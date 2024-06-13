@@ -29,7 +29,7 @@ export function PokemonLeafInfo(props: {
     }
 
     return (
-        <Card className="w-full md:max-w-64 md:ml-4 h-fit relative border-dark shadow">
+        <Card className="w-full md:max-w-64 md:ml-4 h-fit relative shadow" style={{ border: "1px solid rgba(0,0,0,0.2)" }}>
             <CardHeader>
                 <CardTitle className="flex items-center">
                     {props.currentLeaf && props.currentLeaf.species ? (

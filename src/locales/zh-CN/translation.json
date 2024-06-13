@@ -20,6 +20,7 @@
     "how many ivs do you want?": "您需要几V的宝可梦",
     "consider nature in breeding project?": "考虑孵蛋模拟中的性格？",
     "1x31 iv in...": "1x31 V在...",
+    "startbreedingtip": "首先點擊其中一片葉子的“圓圈”，開始為該品種模擬添加神奇寶貝。",
     "breedingexplanation": "对于这只宝可梦，您将花费 $0$，并且您可能需要 $1 只宝可梦。",
     "breedingexplanation2": "价格计算仅基于力量道具（狗圈）、锁性别和不变之石。请注意，，不同性别比例有不同性别选择价格，某些宝可梦的性别选择成本更高。",
     "you can't have the same stats in multiple ivs field.": "在选择使用何种1v素材时，每种v只能选一次",

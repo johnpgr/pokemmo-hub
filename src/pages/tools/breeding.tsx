@@ -8,7 +8,6 @@ import { PokemonBreedSelect } from "@/components/Breeding/PokemonBreedSelect"
 import { PokemonBreedTree } from "@/components/Breeding/PokemonBreedTree"
 import { BreedTreeContext } from "@/components/Breeding/core/ctx/PokemonBreedTreeContext"
 import { Toaster } from "@/components/ui/toaster"
-import { Toaster as ToasterSonner } from "@/components/ui/sonner"
 import "../../global-tw.css"
 
 const Breeding = ({ pageContext }: any) => {
@@ -16,18 +15,19 @@ const Breeding = ({ pageContext }: any) => {
     const PAGE_TITLE = "Breeding simulator"
 
     return (
-        <Page breadcrumbs={pageContext.breadcrumb} label={PAGE_TITLE}>
+        <>
+            <Page breadcrumbs={pageContext.breadcrumb} label={PAGE_TITLE}>
+                <PageTitle>{t(PAGE_TITLE)}</PageTitle>
+                <BreedTreeContext>
+                    <Information title={t("How to use the breeding tool")}>
+                        {t("breedingToolExplanationModal")}
+                    </Information>
+                    <PokemonBreedSelect />
+                    <PokemonBreedTree />
+                </BreedTreeContext>
+            </Page>
             <Toaster />
-            <ToasterSonner />
-            <PageTitle>{t(PAGE_TITLE)}</PageTitle>
-            <BreedTreeContext>
-                <Information title={t("How to use the breeding tool")}>
-                    {t("breedingToolExplanationModal")}
-                </Information>
-                <PokemonBreedSelect />
-                <PokemonBreedTree />
-            </BreedTreeContext>
-        </Page>
+        </>
     )
 }
 

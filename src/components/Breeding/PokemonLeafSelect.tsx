@@ -46,6 +46,7 @@ export function PokemonLeafSelect(props: {
 
     function setPokemonSpecies(species: PokemonSpeciesUnparsed) {
         assert(currentLeaf, `Leaf at ${props.position} should exist`)
+        ctx.setUserHasUsedLeafButton(true)
         currentLeaf.setSpecies(PokemonSpecies.parse(species))
 
         switch (true) {
@@ -153,7 +154,7 @@ export function PokemonLeafSelect(props: {
                         />
                     ) : null}
                 </PopoverTrigger>
-                <PopoverContent className="p-0 flex gap-4 w-full max-w-2xl bg-transparent shadow-none">
+                <PopoverContent className="p-0 flex gap-4 w-full max-w-2xl bg-transparent shadow-none" >
                     {currentLeaf ? (
                         <PokemonLeafInfo
                             desired31IvCount={props.desired31IvCount}
@@ -163,14 +164,14 @@ export function PokemonLeafSelect(props: {
                         />
                     ) : null}
                     {!isPokemonToBreed ? (
-                        <Command className="w-full max-w-lg border border-dark shadow">
+                        <Command className="w-full max-w-lg shadow" style={{ border: "1px solid rgba(0,0,0,0.2)" }}>
                             <CommandInput
                                 placeholder={t("Search pokemon...")}
                                 value={search}
                                 onValueChange={setSearch}
                                 data-cy="search-pokemon-input"
                             />
-                            <div className="flex items-center pl-3 gap-2 text-xs text-foreground/80 p-2 border-b border-dark">
+                            <div className="flex items-center pl-3 gap-2 text-xs text-foreground/80 p-2">
                                 <Checkbox
                                     className="border-foreground/50"
                                     checked={searchMode === SearchMode.EggGroupMatches}

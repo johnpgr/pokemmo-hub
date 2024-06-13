@@ -20,6 +20,7 @@
     "how many ivs do you want?": "Quanti IVs a 31 vuoi?",
     "consider nature in breeding project?": "Inserire la natura nel calcolatore?",
     "1x31 iv in...": "1x31 IV in...",
+    "startbreedingtip": "Start by clicking one of the tree's leafs 'circles' to start adding the Pokémons for this breed simulation.",
     "breedingexplanation": "Per questo Pokémon spenderai $0$ e avrai bisogno di $1 Pokémon.",
     "breedingexplanation2": "Price calculations are based only on the breeding items cost, gender choice and everstone. Keep in consideration that some Pokémon has a higher cost for gender choices.",
     "you can't have the same stats in multiple ivs field.": "You can't have the same stats in multiple IVs field.",

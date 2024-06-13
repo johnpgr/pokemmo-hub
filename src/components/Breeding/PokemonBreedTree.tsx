@@ -1,23 +1,24 @@
-import { PokemonBreed } from "./core/breed"
-import { useBreedTreeContext } from "./core/ctx/PokemonBreedTreeContext"
-import { PokemonGender } from "./core/pokemon"
-import { PokemonBreedTreePosition } from "./core/tree/BreedTreePosition"
-import { PokemonBreedTreePositionKey } from "./core/tree/useBreedTreeMap"
-import { assert } from "@/utils/assert"
+import { Alert, AlertTitle } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { useTranslations } from "@/context/TranslationsContext"
 import { run } from "@/utils"
+import { assert } from "@/utils/assert"
 import React from "react"
-import { toast } from "sonner"
+import { useToast } from "../ui/use-toast"
+import { ImportExportButton, ResetBreedButton } from "./Buttons"
 import { getExpectedBreedCost } from "./PokemonBreedSelect"
 import { PokemonIvColors } from "./PokemonIvColors"
 import { HeldItem, getHeldItemForLeaf } from "./PokemonLeafHeldItem"
 import { PokemonLeafLines } from "./PokemonLeafLines"
 import { PokemonLeafSelect } from "./PokemonLeafSelect"
 import { BREED_ITEM_COSTS, GENDER_GUARANTEE_COST_BY_PERCENTAGE_MALE } from "./consts"
-import { Alert, AlertTitle } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { ImportExportButton, ResetBreedButton } from "./Buttons"
-import { useTranslations } from "@/context/TranslationsContext"
+import { PokemonBreed } from "./core/breed"
+import { useBreedTreeContext } from "./core/ctx/PokemonBreedTreeContext"
+import { PokemonGender } from "./core/pokemon"
+import { PokemonBreedTreePosition } from "./core/tree/BreedTreePosition"
+import { PokemonBreedTreePositionKey } from "./core/tree/useBreedTreeMap"
+import { useLocalStorage } from "usehooks-ts"
 
 export type BreedErrors = Record<PokemonBreedTreePositionKey, Set<PokemonBreed.BreedError> | undefined>
 
@@ -44,6 +45,7 @@ export function PokemonBreedTree() {
 function PokemonBreedTreeFinal() {
     const updateFromBreedEffect = React.useRef(false)
     const ctx = useBreedTreeContext()
+    const { toast } = useToast()
     const { t } = useTranslations()
     assert(ctx.breedTarget.species, "PokemonSpecies must be defined in useBreedMap")
 
@@ -120,6 +122,12 @@ function PokemonBreedTreeFinal() {
         window.location.reload()
     }
 
+    React.useEffect(() => {
+        if (ctx.userHasUsedLeafButton) return
+
+        toast({ title: t("Start breeding"), description: t("startBreedingTip") })
+    }, [ctx.userHasUsedLeafButton])
+
     // Show toast notifications for breed errors
     React.useEffect(() => {
         Object.entries(breedErrors).map(([key, errorKind]) => {
@@ -150,13 +158,13 @@ function PokemonBreedTreeFinal() {
                 errorMsg = errorMsg.slice(0, -2)
             }
 
-            toast.error(`${t(node.species.name)} ${t("cannot breed with")} ${t(partner.species.name)}.`, {
-                description: `${t("Error codes")}: ${errorMsg}`,
-                action: {
-                    label: t("Dismiss"),
-                    onClick: () => { },
-                },
-            })
+            // toast(`${t(node.species.name)} ${t("cannot breed with")} ${t(partner.species.name)}.`, {
+            //     description: `${t("Error codes")}: ${errorMsg}`,
+            //     action: {
+            //         label: t("Dismiss"),
+            //         onClick: () => { },
+            //     },
+            // })
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [breedErrors])
@@ -263,7 +271,7 @@ function PokemonBreedTreeFinal() {
             </div>
             <Alert style={{ border: "1px solid #1B1E22" }}>
                 <AlertTitle className="flex items-center gap-2">
-                    ${t("Current breed cost")}: ${currentBreedCost} / ${t("Expected cost")}: ${expectedCost}
+                    {t("Current breed cost")}: ${currentBreedCost} / {t("Expected cost")}: ${expectedCost}
                 </AlertTitle>
             </Alert>
             <ScrollArea className="bg-popover py-4 rounded-md" style={{ border: '1px solid #1B1E22' }}>
